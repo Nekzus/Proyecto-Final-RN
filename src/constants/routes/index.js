@@ -16,6 +16,8 @@ export default {
   PUBLISH: 'Publish',
   REGISTER: 'Register',
   SEARCH_LIST: 'Search List',
+  SEARCH_MAP: 'Search Map',
+  SEARCH_TAB: 'Search Tab',
   SEARCH: 'Search',
   SETTINGS: 'Settings',
 };

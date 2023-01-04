@@ -1,6 +1,7 @@
-import { DetailScreen, FilterScreen, SearchScreen } from '../../screens';
+import { DetailScreen, FilterScreen, SearchMapScreen, SearchScreen } from '../../screens';
 
 import { ROUTES } from '../../constants';
+import SearchTabNavigator from './SearchTabNavigator';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from '@react-navigation/native';
 
@@ -23,9 +24,14 @@ const SearchNavigator = () => {
         // },
         headerTitleAlign: 'center',
       }}>
-      <Stack.Screen
+      {/* <Stack.Screen
         name={ROUTES.SEARCH_LIST}
         component={SearchScreen}
+        options={{ headerShown: false }}
+      /> */}
+      <Stack.Screen
+        name={ROUTES.SEARCH_TAB}
+        component={SearchTabNavigator}
         options={{ headerShown: false }}
       />
       <Stack.Screen

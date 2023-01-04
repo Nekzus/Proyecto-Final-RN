@@ -1,12 +1,12 @@
 export const primaryTheme = {
   dark: true,
   colors: {
-    primary: '#400219',
-    background: '#2D2D2D',
-    card: '#400219',
-    text: '#D3D3D3',
-    border: '#400219',
-    notification: '#FFFFFF',
+    primary: '#000000',
+    background: '#BC6E4B',
+    card: '#3A2217',
+    text: '#FFFFFF',
+    border: '#0D0705',
+    notification: '#652101',
   },
   fonts: {
     title: 'Qatar-Heavy',

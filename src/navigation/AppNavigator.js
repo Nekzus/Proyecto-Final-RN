@@ -1,18 +1,16 @@
-import { NavigationContainer, useTheme } from '@react-navigation/native';
-
 import AuthNavigator from './AuthNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
 import TabNavigator from './TabNavigator';
-import { primaryTheme } from '../constants';
+import { useTheme } from '@react-navigation/native';
 
 const AppNavigator = () => {
+  const { colors } = useTheme();
+  console.log({ colors });
   return (
     <SafeAreaProvider>
-      <StatusBar backgroundColor="#006400" />
-      <NavigationContainer theme={primaryTheme}>
-        {true ? <TabNavigator /> : <AuthNavigator />}
-      </NavigationContainer>
+      <StatusBar backgroundColor={colors.card} />
+      {true ? <TabNavigator /> : <AuthNavigator />}
     </SafeAreaProvider>
   );
 };

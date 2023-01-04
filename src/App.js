@@ -1,8 +1,10 @@
 import AppNavigator from './navigation/AppNavigator';
+import { NavigationContainer } from '@react-navigation/native';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import { init } from './db';
 import { persistStore } from 'redux-persist';
+import { primaryTheme } from './constants';
 import { store } from './store';
 
 const persistor = persistStore(store);
@@ -18,7 +20,9 @@ const App = () => {
   return (
     <PersistGate persistor={persistor}>
       <Provider store={store}>
-        <AppNavigator />
+        <NavigationContainer theme={primaryTheme}>
+          <AppNavigator />
+        </NavigationContainer>
       </Provider>
     </PersistGate>
   );

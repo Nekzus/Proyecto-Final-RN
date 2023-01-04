@@ -1,6 +1,7 @@
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import AlertsNavigator from './alert/AlertsNavigator';
+import ProfileNavigator from './profile/ProfileNavigator';
 import PublishNavigator from './publish/PublishNavigator';
 import { ROUTES } from '../constants';
 import SearchNavigator from './search/SearchNavigator';
@@ -14,7 +15,7 @@ const TabNavigator = () => {
   return (
     <BottomTab.Navigator
       screenOptions={{
-        headerShown: false,
+        // headerShown: false,
         tabBarLabelStyle: {
           height: 22,
           padding: 1,
@@ -58,7 +59,7 @@ const TabNavigator = () => {
       />
       <BottomTab.Screen
         name={ROUTES.PROFILE}
-        component={PublishNavigator}
+        component={ProfileNavigator}
         options={{
           title: `${ROUTES.PROFILE}`,
           tabBarIcon: ({ focused }) => (

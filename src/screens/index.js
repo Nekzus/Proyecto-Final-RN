@@ -11,5 +11,6 @@ export { default as NewPublishScreen } from './publish/NewPublishScreen';
 export { default as ProfileScreen } from './profile/ProfileScreen';
 export { default as PublishScreen } from './publish/PublishScreen';
 export { default as RegisterScreen } from './auth/RegisterScreen';
+export { default as SearchMapScreen } from './search/SearchMapScreen';
 export { default as SearchScreen } from './search/SearchScreen';
 export { default as SettingsScreen } from './settings/SettingsScreen';
