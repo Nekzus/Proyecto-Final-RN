@@ -1,2 +1,2 @@
-export * from "./locations";
-export * from "./permissions";
+export * from './locations';
+export * from './permissions';
