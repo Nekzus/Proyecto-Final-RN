@@ -1,3 +1,4 @@
+export * from './slices/auth';
 export * from './slices';
 export * from './slices/locations';
 export * from './slices/permissions';

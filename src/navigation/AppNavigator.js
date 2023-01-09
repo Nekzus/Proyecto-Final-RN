@@ -2,15 +2,21 @@ import AuthNavigator from './AuthNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
 import TabNavigator from './TabNavigator';
+import { checkToken } from '../store';
+import { useEffect } from 'react';
 import { useTheme } from '@react-navigation/native';
 
 const AppNavigator = () => {
   const { colors } = useTheme();
-  console.log({ colors });
+
+  useEffect(() => {
+    checkToken();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <StatusBar backgroundColor={colors.card} />
-      {true ? <TabNavigator /> : <AuthNavigator />}
+      {false ? <TabNavigator /> : <AuthNavigator />}
     </SafeAreaProvider>
   );
 };

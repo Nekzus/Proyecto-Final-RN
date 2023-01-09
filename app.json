@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#BC6E4B"
+      "backgroundColor": "#012A4A"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -18,12 +18,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "splash": {
+        "image": "./assets/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#012A4A"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#BC6E4B"
+        "backgroundColor": "#012A4A"
       }
     },
     "web": {
