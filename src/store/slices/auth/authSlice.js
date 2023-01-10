@@ -15,7 +15,7 @@ export const authSlice = createSlice({
       state.token = null;
       state.errorMessage = payload;
     },
-    logout: (state) => {
+    logOff: (state) => {
       state.status = 'not-authenticated';
       state.token = null;
       state.user = null;
@@ -37,4 +37,4 @@ export const authSlice = createSlice({
   },
 });
 
-export const { addError, logout, notAuthenticated, removeError, signUp } = authSlice.actions;
+export const { addError, logOff, notAuthenticated, removeError, signUp } = authSlice.actions;

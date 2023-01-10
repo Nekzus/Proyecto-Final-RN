@@ -24,11 +24,11 @@ const AuthNavigator = () => {
         headerTitleAlign: 'center',
       }}>
       <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} options={{ headerShown: false }} />
-      {/* <Stack.Screen
+      <Stack.Screen
         name={ROUTES.REGISTER}
         component={RegisterScreen}
         options={{ headerShown: false }}
-      /> */}
+      />
     </Stack.Navigator>
   );
 };

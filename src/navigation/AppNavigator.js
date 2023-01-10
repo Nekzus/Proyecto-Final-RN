@@ -11,19 +11,18 @@ import { useTheme } from '@react-navigation/native';
 
 const AppNavigator = () => {
   const { colors } = useTheme();
-  const {status} = useSelector( state => state.auth );
+  const { status } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(checkToken());
-  }, [status]);
+  }, []);
+
   if (status === 'checking') return <LoadingScreen />;
   return (
     <SafeAreaProvider>
       <StatusBar backgroundColor={colors.card} />
-      {(status !== 'authenticated') 
-      ? 
-      (<AuthNavigator />)
-      :( <TabNavigator />) }
+      {status !== 'authenticated' ? <AuthNavigator /> : <TabNavigator />}
     </SafeAreaProvider>
   );
 };

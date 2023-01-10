@@ -1,5 +1,5 @@
+import { ErrorAlert, Logo } from '../../components';
 import {
-  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -8,33 +8,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect } from 'react';
-import { errorClear, signIn } from '../../store';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { AuthStyles } from './AuthStyles';
-import { Logo } from '../../components';
+import { ROUTES } from '../../constants';
+import React from 'react';
+import { signIn } from '../../store';
+import { useDispatch } from 'react-redux';
 import { useForm } from '../../hooks';
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { errorMessage, status, token, user } = useSelector((state) => state.auth);
   const { email, password, onChange } = useForm({
     email: '',
     password: '',
   });
-
-  useEffect(() => {
-    if (errorMessage.length === 0) {
-      return;
-    }
-    Alert.alert('Login incorrecto', errorMessage, [
-      {
-        text: 'ok',
-        onPress: ()=>dispatch(errorClear()),
-      },
-    ]);
-  }, [errorMessage]);
 
   const onLogin = () => {
     Keyboard.dismiss();
@@ -42,6 +29,7 @@ const LoginScreen = ({ navigation }) => {
   };
   return (
     <>
+      <ErrorAlert msg="Login incorrecto" />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -86,7 +74,7 @@ const LoginScreen = ({ navigation }) => {
           <View style={AuthStyles.newUserContainer}>
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={() => navigation.replace('RegisterScreen')}>
+              onPress={() => navigation.replace(ROUTES.REGISTER)}>
               <Text style={AuthStyles.buttonText}>Nueva cuenta</Text>
             </TouchableOpacity>
           </View>

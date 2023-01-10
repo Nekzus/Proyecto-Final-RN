@@ -2,19 +2,20 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import React from 'react';
-import { signOff } from '../../store';
+import { logout } from '../../store';
 import { useTheme } from '@react-navigation/native';
 
 const ProfileScreen = () => {
   const { colors } = useTheme();
- const dispatch = useDispatch();
- const {user:{nombre}}= useSelector( state => state.auth );
+  const dispatch = useDispatch();
+  const {
+    user: { nombre },
+  } = useSelector((state) => state.auth);
   return (
     <View style={styles.container}>
       <Text style={{ color: colors.text }}>{`Bienvenid@ ${nombre}`}</Text>
       <View style={styles.button}>
-
-      <Button title="Cerrar sesión" onPress={()=> dispatch(signOff())}/>
+        <Button title="Cerrar sesión" onPress={() => dispatch(logout())} />
       </View>
     </View>
   );
@@ -29,6 +30,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    marginTop: 10
-  }
+    marginTop: 10,
+  },
 });

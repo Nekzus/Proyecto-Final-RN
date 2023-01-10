@@ -1,4 +1,4 @@
-import { addError, logout, notAuthenticated, removeError, signUp } from './authSlice';
+import { addError, logOff, notAuthenticated, removeError, signUp } from './authSlice';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import petQuestApi from '../../../api/petQuestApi';
@@ -12,7 +12,7 @@ export const checkToken = () => {
       }
       const resp = await petQuestApi.get('/auth');
       if (resp.status !== 200) {
-       dispatch(notAuthenticated());
+        dispatch(notAuthenticated());
       }
       await AsyncStorage.setItem('token', resp.data.token);
       dispatch(
@@ -27,10 +27,10 @@ export const checkToken = () => {
   };
 };
 
-export const signOff = () => {
+export const logout = () => {
   return async (dispatch) => {
     await AsyncStorage.removeItem('token');
-    dispatch(logout());
+    dispatch(logOff());
   };
 };
 
@@ -53,7 +53,7 @@ export const signIn = ({ email, password }) => {
       );
       await AsyncStorage.setItem('token', data.token);
     } catch (error) {
-      if(!error.response) return
+      if (!error.response) return;
       dispatch(addError(error.response.data.msg || 'Revisar información'));
     }
   };
@@ -75,7 +75,7 @@ export const register = ({ nombre, email, password }) => {
       );
       await AsyncStorage.setItem('token', data.token);
     } catch (error) {
-      if(!error.response) return
+      if (!error.response) return;
       dispatch(addError(error.response.data.msg || 'Revisar información'));
     }
   };
