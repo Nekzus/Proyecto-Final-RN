@@ -1,8 +1,5 @@
 {
-  "conventionalCommits.scopes": [
-    "Initialized project",
-    "Readme",
-    "Application development",
-    "Login"
-  ]
+    "conventionalCommits.scopes": [
+        "Login"
+    ]
 }

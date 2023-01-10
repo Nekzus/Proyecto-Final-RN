@@ -1,5 +1,6 @@
 import { addError, logout, notAuthenticated, removeError, signUp } from './authSlice';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import petQuestApi from '../../../api/petQuestApi';
 
 export const checkToken = () => {
@@ -7,11 +8,11 @@ export const checkToken = () => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) {
-        return dispatch(notAuthenticated);
+        return dispatch(notAuthenticated());
       }
       const resp = await petQuestApi.get('/auth');
       if (resp.status !== 200) {
-        dispatch(notAuthenticated());
+       dispatch(notAuthenticated());
       }
       await AsyncStorage.setItem('token', resp.data.token);
       dispatch(
@@ -21,7 +22,7 @@ export const checkToken = () => {
         })
       );
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.msg);
     }
   };
 };
@@ -52,7 +53,8 @@ export const signIn = ({ email, password }) => {
       );
       await AsyncStorage.setItem('token', data.token);
     } catch (error) {
-      dispatch(addError(error.response.data.errors[0].msg || 'Revisar información'));
+      if(!error.response) return
+      dispatch(addError(error.response.data.msg || 'Revisar información'));
     }
   };
 };
@@ -73,7 +75,8 @@ export const register = ({ nombre, email, password }) => {
       );
       await AsyncStorage.setItem('token', data.token);
     } catch (error) {
-      dispatch(addError(error.response.data.errors[0].msg || 'Revisar información'));
+      if(!error.response) return
+      dispatch(addError(error.response.data.msg || 'Revisar información'));
     }
   };
 };

@@ -18,7 +18,7 @@ import { useForm } from '../../hooks';
 
 const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { errorMessage } = useSelector((state) => state.auth);
+  const { errorMessage, status, token, user } = useSelector((state) => state.auth);
   const { email, password, onChange } = useForm({
     email: '',
     password: '',
@@ -31,13 +31,12 @@ const LoginScreen = ({ navigation }) => {
     Alert.alert('Login incorrecto', errorMessage, [
       {
         text: 'ok',
-        onPress: dispatch(errorClear()),
+        onPress: ()=>dispatch(errorClear()),
       },
     ]);
   }, [errorMessage]);
 
   const onLogin = () => {
-    console.log({ email, password });
     Keyboard.dismiss();
     dispatch(signIn({ email, password }));
   };
