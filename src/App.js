@@ -2,6 +2,7 @@ import AppNavigator from './navigation/AppNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { init } from './db';
 import { persistStore } from 'redux-persist';
 import { primaryTheme } from './constants';
@@ -21,7 +22,9 @@ const App = () => {
     <PersistGate persistor={persistor}>
       <Provider store={store}>
         <NavigationContainer theme={primaryTheme}>
-          <AppNavigator />
+          <SafeAreaProvider>
+            <AppNavigator />
+          </SafeAreaProvider>
         </NavigationContainer>
       </Provider>
     </PersistGate>
