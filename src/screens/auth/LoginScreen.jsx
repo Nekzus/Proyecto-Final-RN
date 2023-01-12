@@ -12,7 +12,7 @@ import {
 import { AuthStyles } from './AuthStyles';
 import { ROUTES } from '../../constants';
 import React from 'react';
-import { signIn } from '../../store';
+import { login } from '../../store';
 import { useDispatch } from 'react-redux';
 import { useForm } from '../../hooks';
 
@@ -25,7 +25,7 @@ const LoginScreen = ({ navigation }) => {
 
   const onLogin = () => {
     Keyboard.dismiss();
-    dispatch(signIn({ email, password }));
+    dispatch(login({ email, password }));
   };
   return (
     <>

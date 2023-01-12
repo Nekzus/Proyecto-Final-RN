@@ -1,9 +1,9 @@
 import { Button, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { askPermissionLocation, checkPermissionCamera, logout } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Avatar } from '@rneui/themed';
-import React from 'react';
-import { logout } from '../../store';
 import { useTheme } from '@react-navigation/native';
 
 const ProfileScreen = () => {
@@ -12,6 +12,15 @@ const ProfileScreen = () => {
   const {
     user: { nombre, img },
   } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(checkPermissionCamera());
+  }, []);
+
+  useEffect(() => {
+    dispatch(askPermissionLocation());
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={{ ...styles.userContainer, backgroundColor: colors.notification }}>
@@ -20,7 +29,7 @@ const ProfileScreen = () => {
           rounded
           containerStyle={styles.avatar}
           icon={{ name: 'person', type: 'material' }}
-          source={img ? { uri: img } : ''}>
+          source={img ? { uri: img } : null}>
           <Avatar.Accessory size={24} onPress={() => console.log('Cambiar Avatar')} />
         </Avatar>
         <View style={styles.dataUser}>

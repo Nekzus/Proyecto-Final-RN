@@ -1,10 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 export const permissionsSlice = createSlice({
-  name: "permissions",
+  name: 'permissions',
   initialState: {
-    locationStatus: "denied",
-    cameraStatus: "denied",
+    locationStatus: 'denied',
+    cameraStatus: 'denied',
   },
   reducers: {
     akPermissionLocation: (state, action) => {
@@ -13,8 +13,11 @@ export const permissionsSlice = createSlice({
     ckPermissionLocation: (state, action) => {
       state.locationStatus = action.payload;
     },
+    ckPermissionCamera: (state, action) => {
+      state.cameraStatus = action.payload;
+    },
   },
 });
 
-export const { akPermissionLocation, ckPermissionLocation } =
+export const { akPermissionLocation, ckPermissionLocation, ckPermissionCamera } =
   permissionsSlice.actions;

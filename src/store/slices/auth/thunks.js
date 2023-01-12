@@ -1,4 +1,4 @@
-import { addError, logOff, notAuthenticated, removeError, signUp } from './authSlice';
+import { addError, logOff, notAuthenticated, removeError, signIn, signUp } from './authSlice';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import petQuestApi from '../../../api/petQuestApi';
@@ -12,6 +12,7 @@ export const checkToken = () => {
       }
       const resp = await petQuestApi.get('/auth');
       if (resp.status !== 200) {
+        await AsyncStorage.removeItem('token');
         dispatch(notAuthenticated());
       }
       await AsyncStorage.setItem('token', resp.data.token);
@@ -22,23 +23,18 @@ export const checkToken = () => {
         })
       );
     } catch (error) {
-      console.log(error.response.data.msg);
+      dispatch(addError(error.response.data.msg || 'Error en token'));
     }
   };
 };
 
-export const logout = () => {
-  return async (dispatch) => {
-    await AsyncStorage.removeItem('token');
-    dispatch(logOff());
+export const errorClear = () => {
+  return (dispatch) => {
+    dispatch(removeError());
   };
 };
 
-export const errorClear = () => {
-  return (dispatch) => dispatch(removeError());
-};
-
-export const signIn = ({ email, password }) => {
+export const login = ({ email, password }) => {
   return async (dispatch) => {
     try {
       const { data } = await petQuestApi.post('/auth/login', {
@@ -46,7 +42,7 @@ export const signIn = ({ email, password }) => {
         password,
       });
       dispatch(
-        signUp({
+        signIn({
           token: data.token,
           user: data.usuario,
         })
@@ -59,6 +55,17 @@ export const signIn = ({ email, password }) => {
   };
 };
 
+export const logout = () => {
+  return async (dispatch) => {
+    try {
+      await AsyncStorage.removeItem('token');
+      dispatch(logOff());
+    } catch (err) {
+      dispatch(addError(err.response.data.msg || 'Error en logout'));
+    }
+  };
+};
+
 export const register = ({ nombre, email, password }) => {
   return async (dispatch) => {
     try {
@@ -67,13 +74,13 @@ export const register = ({ nombre, email, password }) => {
         email,
         password,
       });
+      await AsyncStorage.setItem('token', data.token);
       dispatch(
         signUp({
           token: data.token,
           user: data.usuario,
         })
       );
-      await AsyncStorage.setItem('token', data.token);
     } catch (error) {
       if (!error.response) return;
       dispatch(addError(error.response.data.msg || 'Revisar información'));

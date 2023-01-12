@@ -1,19 +1,18 @@
-import * as Location from "expo-location";
+import * as Camera from 'expo-image-picker';
+import * as Location from 'expo-location';
 
-import { akPermissionLocation, ckPermissionLocation } from "./permissionsSlice";
+import { akPermissionLocation, ckPermissionCamera, ckPermissionLocation } from './permissionsSlice';
 
-import { Alert } from "react-native";
+import { Alert } from 'react-native';
 
 export const askPermissionLocation = () => {
   return async (dispatch) => {
     const { status } = await Location.requestForegroundPermissionsAsync();
     dispatch(akPermissionLocation(status));
-    if (status !== "granted") {
-      Alert.alert(
-        "Permiso insuficientes",
-        "Necesitamos permisos para usar la localizacion",
-        [{ text: "Ok" }]
-      );
+    if (status !== 'granted') {
+      Alert.alert('Permiso insuficientes', 'Necesitamos permisos para usar la localizacion', [
+        { text: 'Ok' },
+      ]);
     }
   };
 };
@@ -22,5 +21,12 @@ export const checkPermissionLocation = () => {
   return async (dispatch) => {
     const { status } = await Location.getForegroundPermissionsAsync();
     dispatch(ckPermissionLocation(status));
+  };
+};
+
+export const checkPermissionCamera = () => {
+  return async (dispatch) => {
+    const { status } = await Camera.requestCameraPermissionsAsync();
+    dispatch(ckPermissionCamera(status));
   };
 };
