@@ -13,11 +13,18 @@ export const permissionsSlice = createSlice({
     ckPermissionLocation: (state, action) => {
       state.locationStatus = action.payload;
     },
+    akPermissionCamera: (state, action) => {
+      state.cameraStatus = action.payload;
+    },
     ckPermissionCamera: (state, action) => {
       state.cameraStatus = action.payload;
     },
   },
 });
 
-export const { akPermissionLocation, ckPermissionLocation, ckPermissionCamera } =
-  permissionsSlice.actions;
+export const {
+  akPermissionLocation,
+  akPermissionCamera,
+  ckPermissionLocation,
+  ckPermissionCamera,
+} = permissionsSlice.actions;

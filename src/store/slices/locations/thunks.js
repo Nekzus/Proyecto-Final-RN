@@ -45,9 +45,9 @@ export const currentLocation = () => {
       } else {
         throw new Error('Location not available');
       }
-    } catch (err) {
-      console.log('Error in currentLocation', err);
-      dispatch(errorLocations(err));
+    } catch (error) {
+      console.log('Error in currentLocation', error);
+      dispatch(errorLocations(error));
     } finally {
       dispatch(loadingLocations(false));
     }
@@ -91,9 +91,9 @@ export const loadAddress = () => {
       } = await fetchAddress();
       dispatch(historyLocations(_array));
       dispatch(loadingLocations(false));
-    } catch (err) {
-      console.log(err);
-      dispatch(errorLocations(err));
+    } catch (error) {
+      console.log(error);
+      dispatch(errorLocations(error));
       dispatch(loadingLocations(false));
     }
   };

@@ -60,8 +60,8 @@ export const logout = () => {
     try {
       await AsyncStorage.removeItem('token');
       dispatch(logOff());
-    } catch (err) {
-      dispatch(addError(err.response.data.msg || 'Error en logout'));
+    } catch (error) {
+      dispatch(addError(error.response.data.msg || 'Error en logout'));
     }
   };
 };

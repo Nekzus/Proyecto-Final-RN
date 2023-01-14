@@ -1,25 +1,55 @@
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
-import { askPermissionLocation, checkPermissionCamera, logout } from '../../store';
+import {
+  askPermissionCamera,
+  askPermissionLocation,
+  checkPermissionCamera,
+  checkPermissionLocation,
+  logout,
+} from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Avatar } from '@rneui/themed';
+import { useCameraPermissions } from 'expo-image-picker';
 import { useTheme } from '@react-navigation/native';
 
 const ProfileScreen = () => {
   const { colors } = useTheme();
   const dispatch = useDispatch();
+  // const [permission, requestPermission] = useCameraPermissions();
+
   const {
     user: { nombre, img },
   } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    dispatch(checkPermissionCamera());
-  }, []);
+  // console.log(permission?.status);
+
+  // useEffect(() => {
+  //   askPermission();
+  // }, []);
+
+  // const askPermission = async () => {
+  //   const { status } = await requestPermission();
+  //   if (status !== 'granted') {
+  //     Alert.alert('Necesitamos permisos para acceder a la cámara');
+  //   }
+  // };
 
   useEffect(() => {
     dispatch(askPermissionLocation());
   }, []);
+
+  // useEffect(() => {
+  //   dispatch(checkPermissionLocation());
+  // }, []);
+
+  useEffect(() => {
+    dispatch(askPermissionCamera());
+  }, []);
+
+  // useEffect(() => {
+  //   dispatch(checkPermissionCamera());
+  // }, []);
 
   return (
     <View style={styles.container}>
