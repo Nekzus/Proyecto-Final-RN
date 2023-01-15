@@ -24,7 +24,7 @@ export const permissionsSlice = createSlice({
 
 export const {
   akPermissionLocation,
-  akPermissionCamera,
   ckPermissionLocation,
+  akPermissionCamera,
   ckPermissionCamera,
 } = permissionsSlice.actions;

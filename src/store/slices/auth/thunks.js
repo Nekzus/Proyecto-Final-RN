@@ -1,4 +1,12 @@
-import { addError, logOff, notAuthenticated, removeError, signIn, signUp } from './authSlice';
+import {
+  addError,
+  logOff,
+  notAuthenticated,
+  removeError,
+  signIn,
+  signUp,
+  updateUser,
+} from './authSlice';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import petQuestApi from '../../../api/petQuestApi';
@@ -81,6 +89,20 @@ export const register = ({ nombre, email, password }) => {
           user: data.usuario,
         })
       );
+    } catch (error) {
+      if (!error.response) return;
+      dispatch(addError(error.response.data.msg || 'Revisar información'));
+    }
+  };
+};
+
+export const updateProfile = ({ name, uid }) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await petQuestApi.put(`/usuarios/${uid}`, {
+        nombre: name,
+      });
+      dispatch(updateUser({ user: data.usuario }));
     } catch (error) {
       if (!error.response) return;
       dispatch(addError(error.response.data.msg || 'Revisar información'));

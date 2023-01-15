@@ -8,7 +8,7 @@ import thunk from 'redux-thunk';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: [' locations', ' permissions'],
+  whitelist: [],
 };
 
 const rootReducer = combineReducers({

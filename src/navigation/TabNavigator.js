@@ -12,6 +12,7 @@ const BottomTab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const { colors, fonts } = useTheme();
+
   return (
     <BottomTab.Navigator
       screenOptions={{

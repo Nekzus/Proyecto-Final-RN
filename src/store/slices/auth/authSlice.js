@@ -40,8 +40,19 @@ export const authSlice = createSlice({
       state.token = payload.token;
       state.user = payload.user;
     },
+    updateUser: (state, { payload }) => {
+      state.user.name = payload.user.nombre;
+    },
   },
 });
 
-export const { addError, logOff, notAuthenticated, removeError, signIn, signUp } =
-  authSlice.actions;
+export const {
+  addError,
+  addImage,
+  logOff,
+  notAuthenticated,
+  removeError,
+  signIn,
+  signUp,
+  updateUser,
+} = authSlice.actions;
