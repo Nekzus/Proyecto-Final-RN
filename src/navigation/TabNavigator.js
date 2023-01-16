@@ -62,6 +62,7 @@ const TabNavigator = () => {
         name={ROUTES.PROFILE}
         component={ProfileNavigator}
         options={{
+          headerShown: false,
           title: `${ROUTES.PROFILE}`,
           tabBarIcon: ({ focused }) => (
             <Ionicons name={focused ? 'home' : 'home-outline'} size={22} color={colors.text} />

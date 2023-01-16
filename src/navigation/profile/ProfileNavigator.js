@@ -37,7 +37,7 @@ const ProfileNavigator = () => {
       <Stack.Screen
         name={ROUTES.EDIT_PROFILE}
         component={EditProfileScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       />
       <Stack.Screen
         name={ROUTES.MY_LOCATION}

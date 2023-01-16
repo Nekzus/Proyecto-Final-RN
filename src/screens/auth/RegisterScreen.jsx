@@ -1,8 +1,10 @@
+import { COLORS, ROUTES } from '../../constants';
 import { ErrorAlert, Logo } from '../../components';
 import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -10,15 +12,14 @@ import {
 } from 'react-native';
 
 import { AuthStyles } from './AuthStyles';
-import { ROUTES } from '../../constants';
 import React from 'react';
 import { register } from '../../store';
 import { useDispatch } from 'react-redux';
-import { useForm } from '../../hooks';
+import { useFormValidator } from '../../hooks';
 
 const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { email, password, name, onChange } = useForm({
+  const { email, password, name, onChange, errors, validate, isValid, onReset } = useFormValidator({
     name: '',
     email: '',
     password: '',
@@ -26,10 +27,13 @@ const RegisterScreen = ({ navigation }) => {
 
   const onRegister = () => {
     Keyboard.dismiss();
-    dispatch(register({ nombre: name, email, password }));
+    validate();
+    if (isValid) {
+      dispatch(register({ nombre: name, email, password }));
+    }
   };
   return (
-    <>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
       <ErrorAlert msg="Registro incorrecto" />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -50,7 +54,11 @@ const RegisterScreen = ({ navigation }) => {
             selectionColor="white"
             autoCapitalize="words"
             autoCorrect={false}
+            onFocus={() => onReset(null, 'name')}
           />
+          {errors.name && (
+            <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{errors.name}</Text>
+          )}
 
           <Text style={AuthStyles.label}>Email:</Text>
           <TextInput
@@ -65,7 +73,11 @@ const RegisterScreen = ({ navigation }) => {
             selectionColor="white"
             autoCapitalize="none"
             autoCorrect={false}
+            onFocus={() => onReset(null, 'email')}
           />
+          {errors.email && (
+            <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{errors.email}</Text>
+          )}
 
           <Text style={AuthStyles.label}>Contraseña:</Text>
           <TextInput
@@ -80,7 +92,11 @@ const RegisterScreen = ({ navigation }) => {
             selectionColor="white"
             autoCapitalize="none"
             autoCorrect={false}
+            onFocus={() => onReset(null, 'password')}
           />
+          {errors.password && (
+            <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{errors.password}</Text>
+          )}
           <View style={AuthStyles.buttonContainer}>
             <TouchableOpacity activeOpacity={0.8} style={AuthStyles.button} onPress={onRegister}>
               <Text style={AuthStyles.buttonText}>Crear cuenta</Text>
@@ -95,7 +111,7 @@ const RegisterScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </>
+    </ScrollView>
   );
 };
 
