@@ -1,5 +1,6 @@
 import {
   addError,
+  loadingData,
   logOff,
   notAuthenticated,
   removeError,
@@ -31,7 +32,8 @@ export const checkToken = () => {
         })
       );
     } catch (error) {
-      dispatch(addError(error.response.data.msg || 'Error en token'));
+      if (!error.response) return;
+      dispatch(addError(error.response.data.msg || error.response.data.errors[0].msg));
     }
   };
 };
@@ -58,7 +60,7 @@ export const login = ({ email, password }) => {
       await AsyncStorage.setItem('token', data.token);
     } catch (error) {
       if (!error.response) return;
-      dispatch(addError(error.response.data.msg || 'Revisar información'));
+      dispatch(addError(error.response.data.msg || error.response.data.errors[0].msg));
     }
   };
 };
@@ -69,7 +71,8 @@ export const logout = () => {
       await AsyncStorage.removeItem('token');
       dispatch(logOff());
     } catch (error) {
-      dispatch(addError(error.response.data.msg || 'Error en logout'));
+      if (!error.response) return;
+      dispatch(addError(error.response.data.msg || error.response.data.errors[0].msg));
     }
   };
 };
@@ -91,7 +94,7 @@ export const register = ({ nombre, email, password }) => {
       );
     } catch (error) {
       if (!error.response) return;
-      dispatch(addError(error.response.data.msg || 'Revisar información'));
+      dispatch(addError(error.response.data.msg || error.response.data.errors[0].msg));
     }
   };
 };
@@ -102,10 +105,17 @@ export const updateProfile = ({ name, uid }) => {
       const { data } = await petQuestApi.put(`/usuarios/${uid}`, {
         nombre: name,
       });
-      dispatch(updateUser({ user: data.usuario }));
+      console.log(data.usuario);
+      dispatch(updateUser(data));
     } catch (error) {
       if (!error.response) return;
-      dispatch(addError(error.response.data.msg || 'Revisar información'));
+      dispatch(addError(error.response.data.msg || error.response.data.errors[0].msg));
     }
+  };
+};
+
+export const loadingState = (state) => {
+  return (dispatch) => {
+    dispatch(loadingData(state));
   };
 };

@@ -7,6 +7,7 @@ export const authSlice = createSlice({
     token: null,
     errorMessage: '',
     user: null,
+    loading: false,
   },
   reducers: {
     addError: (state, { payload }) => {
@@ -41,7 +42,10 @@ export const authSlice = createSlice({
       state.user = payload.user;
     },
     updateUser: (state, { payload }) => {
-      state.user.name = payload.user.nombre;
+      state.user = payload;
+    },
+    loadingData: (state, { payload }) => {
+      state.loading = payload;
     },
   },
 });
@@ -55,4 +59,5 @@ export const {
   signIn,
   signUp,
   updateUser,
+  loadingData,
 } = authSlice.actions;

@@ -13,11 +13,14 @@ import {
 import React, { useState } from 'react';
 
 import { AuthStyles } from './AuthStyles';
+import Input from '../../components/Input';
 import { login } from '../../store';
 import { useDispatch } from 'react-redux';
 import { useFormValidator } from '../../hooks';
+import { useTheme } from '@react-navigation/native';
 
 const LoginScreen = ({ navigation }) => {
+  const { colors } = useTheme();
   const dispatch = useDispatch();
   const { email, password, onChange, errors, isValid, validate, onReset } = useFormValidator({
     email: '',
@@ -33,55 +36,43 @@ const LoginScreen = ({ navigation }) => {
   };
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-      <ErrorAlert msg="Login incorrecto" />
+      <ErrorAlert msg="Autentificación fallida" />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={AuthStyles.formContainer}>
           <Logo />
           <Text style={AuthStyles.title}>Login</Text>
-          <View>
-            <Text style={AuthStyles.label}>Email:</Text>
-            <TextInput
-              placeholder="Ingrese su email"
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              keyboardType="email-address"
-              underlineColorAndroid="white"
-              style={[AuthStyles.inputField, Platform.OS === 'ios' && AuthStyles.inputFieldIOS]}
-              onChangeText={(value) => onChange(value, 'email')}
-              value={email}
-              onSubmitEditing={onLogin}
-              selectionColor="white"
-              autoCapitalize="none"
-              autoCorrect={false}
-              onFocus={() => onReset(null, 'email')}
-            />
-            {errors.email && (
-              <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{errors.email}</Text>
-            )}
-          </View>
-          <View>
-            <Text style={AuthStyles.label}>Contraseña:</Text>
-            <TextInput
-              placeholder="******"
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              underlineColorAndroid="white"
-              secureTextEntry
-              style={[AuthStyles.inputField, Platform.OS === 'ios' && AuthStyles.inputFieldIOS]}
-              onChangeText={(value) => onChange(value, 'password')}
-              value={password}
-              onSubmitEditing={onLogin}
-              selectionColor="white"
-              autoCapitalize="none"
-              autoCorrect={false}
-              onFocus={() => onReset(null, 'password')}
-            />
-            {errors.password && (
-              <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>
-                {errors.password}
-              </Text>
-            )}
-          </View>
+          <Input
+            label="Email"
+            iconName="email-outline"
+            error={errors.email}
+            placeholder="Ingrese su email"
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            keyboardType="email-address"
+            onChangeText={(value) => onChange(value, 'email')}
+            value={email}
+            onSubmitEditing={onLogin}
+            selectionColor={colors.notification}
+            autoCapitalize="none"
+            autoCorrect={false}
+            onFocus={() => onReset(null, 'email')}
+          />
+          <Input
+            label="Contraseña"
+            iconName="lock-outline"
+            error={errors.password}
+            password
+            placeholder="Ingrese su contraseña"
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            onChangeText={(value) => onChange(value, 'password')}
+            value={password}
+            onSubmitEditing={onLogin}
+            selectionColor={colors.notification}
+            autoCapitalize="none"
+            autoCorrect={false}
+            onFocus={() => onReset(null, 'password')}
+          />
           <View style={AuthStyles.buttonContainer}>
             <TouchableOpacity activeOpacity={0.8} style={AuthStyles.button} onPress={onLogin}>
               <Text style={AuthStyles.buttonText}>Login</Text>
