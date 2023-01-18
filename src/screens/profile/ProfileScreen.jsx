@@ -1,37 +1,16 @@
-import * as ImagePicker from 'expo-image-picker';
-
-import {
-  Alert,
-  Button,
-  Image,
-  Keyboard,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { COLORS, ROUTES } from '../../constants';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { askPermissionCamera, askPermissionLocation, logout, updateProfile } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Avatar } from '@rneui/themed';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { ROUTES } from '../../constants';
-import { useFormValidator } from '../../hooks';
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
 
 const ProfileScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const dispatch = useDispatch();
-  const [tempUri, setTempUri] = useState();
-  const [tempName, setTempName] = useState();
-
-  const { email, password, name, onChange } = useFormValidator({
-    name: '',
-    email: '',
-    password: '',
-  });
 
   const {
     user: { nombre, img, uid },
@@ -54,25 +33,55 @@ const ProfileScreen = ({ navigation }) => {
             rounded
             containerStyle={styles.avatar}
             icon={{ name: 'person', type: 'material' }}
-            source={img ? { uri: img.length > 0 && !tempUri ? img : tempUri } : null}></Avatar>
+            source={img ? { uri: img } : null}></Avatar>
         </View>
         <View style={styles.dataContainer}>
-          <Text style={{ color: colors.text, fontSize: 18 }}>
-            {nombre && !tempName ? nombre : tempName}
-          </Text>
-          <View style={styles.button}>
-            <Button title="Cerrar sesión" onPress={() => dispatch(logout())} />
-          </View>
+          <Text style={{ color: colors.text, fontSize: 22, fontWeight: 'bold' }}>{nombre}</Text>
         </View>
         <View style={styles.iconContainer}>
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => navigation.navigate(ROUTES.EDIT_PROFILE)}>
-            <MaterialCommunityIcons name="account-edit" size={25} color={colors.text} />
+            <Icon name="account-edit" size={25} color={colors.text} />
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.body}></View>
+      <View style={styles.optionsContainer}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            navigation.navigate(ROUTES.MY_LOCATION);
+          }}
+          style={styles.option}>
+          <Icon name="map" size={24} color={colors.text} />
+          <Text style={{ ...styles.optionText, color: colors.text }}>Mi ubicación</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            navigation.navigate(ROUTES.MY_PUBLISH);
+          }}
+          style={styles.option}>
+          <Icon name="alert-box-outline" size={24} color={colors.text} />
+          <Text style={{ ...styles.optionText, color: colors.text }}>Mis anuncios</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            navigation.navigate(ROUTES.SETTINGS);
+          }}
+          style={styles.option}>
+          <Icon name="cog" size={24} color={colors.text} />
+          <Text style={{ ...styles.optionText, color: colors.text }}>Configuración</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => dispatch(logout())}
+          style={styles.option}>
+          <Icon name="exit-run" size={24} color={colors.text} />
+          <Text style={{ ...styles.optionText, color: colors.text }}>Cerrar sesión</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -114,5 +123,20 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  optionsContainer: {
+    alignItems: 'flex-start',
+  },
+  option: {
+    flexDirection: 'row',
+    alignSelf: 'stretch',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.grey,
+  },
+  optionText: {
+    marginLeft: 30,
+    fontSize: 18,
   },
 });

@@ -42,17 +42,17 @@ const ProfileNavigator = () => {
       <Stack.Screen
         name={ROUTES.MY_LOCATION}
         component={MyLocationScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       />
       <Stack.Screen
         name={ROUTES.MY_PUBLISH}
         component={MyPublishScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       />
       <Stack.Screen
         name={ROUTES.SETTINGS}
         component={SettingsScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       />
     </Stack.Navigator>
   );

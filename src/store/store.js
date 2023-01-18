@@ -1,14 +1,14 @@
 import { authSlice, locationsSlice, permissionsSlice } from './slices';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { persistReducer, persistStore } from 'redux-persist';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { persistReducer } from 'redux-persist';
 import thunk from 'redux-thunk';
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['locations'],
+  whitelist: ['auth', 'locations', 'permissions'],
 };
 
 const rootReducer = combineReducers({
@@ -24,3 +24,5 @@ export const store = configureStore({
   middleware: [thunk],
   devTools: process.env.NODE_ENV !== 'production',
 });
+
+export const persistor = persistStore(store);

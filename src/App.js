@@ -1,14 +1,12 @@
+import { persistor, store } from './store';
+
 import AppNavigator from './navigation/AppNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { init } from './db';
-import { persistStore } from 'redux-persist';
 import { primaryTheme } from './constants';
-import { store } from './store';
-
-const persistor = persistStore(store);
 
 init()
   .then(() => console.log('DB initialized'))
@@ -19,15 +17,15 @@ init()
 
 const App = () => {
   return (
-    <PersistGate persistor={persistor}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer theme={primaryTheme}>
           <SafeAreaProvider>
             <AppNavigator />
           </SafeAreaProvider>
         </NavigationContainer>
-      </Provider>
-    </PersistGate>
+      </PersistGate>
+    </Provider>
   );
 };
 

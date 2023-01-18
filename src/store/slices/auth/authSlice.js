@@ -52,7 +52,6 @@ export const authSlice = createSlice({
 
 export const {
   addError,
-  addImage,
   logOff,
   notAuthenticated,
   removeError,
@@ -60,4 +59,5 @@ export const {
   signUp,
   updateUser,
   loadingData,
+  greetingChange,
 } = authSlice.actions;
