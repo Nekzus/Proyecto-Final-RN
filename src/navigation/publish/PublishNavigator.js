@@ -31,7 +31,10 @@ const PublishNavigator = () => {
       <Stack.Screen
         name={ROUTES.NEW_PUBLISH}
         component={NewPublishScreen}
-        options={{ headerShown: true }}
+        options={({ route }) => ({
+          title: `${ROUTES.NEW_PUBLISH} ${route.params.title}`,
+          headerShown: true,
+        })}
       />
       <Stack.Screen
         name={ROUTES.MY_PUBLISH}

@@ -44,6 +44,11 @@ export const useFormValidator = (initialState) => {
           }
         });
       } else {
+        if (value.trim().length === 0) {
+          newErrors[field] = 'El campo es obligatorio';
+          newIsValid = false;
+          return;
+        }
         newErrors[field] = '';
       }
     });

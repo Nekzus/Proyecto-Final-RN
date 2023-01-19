@@ -16,7 +16,7 @@ const PublishScreen = ({ navigation }) => {
     <View style={styles.container}>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => handlePublish({ title: 'Animal Perdido', type: 'lost' })}>
+        onPress={() => handlePublish({ title: 'Mascota Perdida', type: 'lost' })}>
         <Card
           containerStyle={{
             backgroundColor: colors.primary,
@@ -25,7 +25,7 @@ const PublishScreen = ({ navigation }) => {
             height: 125,
           }}>
           <Card.Title style={{ ...styles.textButton, color: colors.text }}>
-            Animal Perdido
+            Mascota Perdida
           </Card.Title>
           <Card.Divider />
           <Text style={{ ...styles.bodyText, color: colors.text }}>
@@ -35,7 +35,7 @@ const PublishScreen = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => handlePublish({ title: 'Animal Encontrado', type: 'found' })}>
+        onPress={() => handlePublish({ title: 'Mascota Encontrada', type: 'found' })}>
         <Card
           containerStyle={{
             backgroundColor: colors.primary,
@@ -44,7 +44,7 @@ const PublishScreen = ({ navigation }) => {
             height: 125,
           }}>
           <Card.Title style={{ ...styles.textButton, color: colors.text }}>
-            Animal Encontrado
+            Mascota Encontrada
           </Card.Title>
           <Card.Divider />
           <Text style={{ ...styles.bodyText, color: colors.text }}>
@@ -54,7 +54,7 @@ const PublishScreen = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => handlePublish({ title: 'Animal en Adopción', type: 'adoption' })}>
+        onPress={() => handlePublish({ title: 'Mascota en Adopción', type: 'adoption' })}>
         <Card
           containerStyle={{
             backgroundColor: colors.primary,
@@ -63,7 +63,7 @@ const PublishScreen = ({ navigation }) => {
             height: 125,
           }}>
           <Card.Title style={{ ...styles.textButton, color: colors.text }}>
-            Animal en Adopción
+            Mascota en Adopción
           </Card.Title>
           <Card.Divider />
           <Text style={{ ...styles.bodyText, color: colors.text }}>

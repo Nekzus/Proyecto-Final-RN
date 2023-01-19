@@ -9,7 +9,7 @@ export default {
   MAP: 'Map',
   MY_LOCATION: 'Mi ubicación',
   MY_PUBLISH: 'Mis publicaciones',
-  NEW_PUBLISH: 'Nueva publicación',
+  NEW_PUBLISH: 'Nueva',
   PROFILE_LIST: 'Profile List',
   PROFILE: 'Perfil',
   PUBLISH_LIST: 'Publish List',
