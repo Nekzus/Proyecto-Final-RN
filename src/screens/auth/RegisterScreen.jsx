@@ -22,15 +22,15 @@ import { useTheme } from '@react-navigation/native';
 const RegisterScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const dispatch = useDispatch();
-  const { email, password, name, onChange, errors, validate, isValid, onReset } = useFormValidator({
+  const { email, password, name, onChange, errors, onValidate, onReset } = useFormValidator({
     name: '',
     email: '',
     password: '',
   });
 
   const onRegister = () => {
+    const isValid = onValidate();
     Keyboard.dismiss();
-    validate();
     if (isValid) {
       dispatch(register({ nombre: name, email, password }));
     }
@@ -56,7 +56,7 @@ const RegisterScreen = ({ navigation }) => {
             selectionColor={colors.notification}
             autoCapitalize="words"
             autoCorrect={false}
-            onFocus={() => onReset(null, 'name')}
+            onFocus={() => onReset('name')}
           />
 
           <Input
@@ -72,7 +72,7 @@ const RegisterScreen = ({ navigation }) => {
             selectionColor={colors.notification}
             autoCapitalize="none"
             autoCorrect={false}
-            onFocus={() => onReset(null, 'email')}
+            onFocus={() => onReset('email')}
           />
           <Input
             label="Contraseña"
@@ -87,7 +87,7 @@ const RegisterScreen = ({ navigation }) => {
             selectionColor={colors.notification}
             autoCapitalize="none"
             autoCorrect={false}
-            onFocus={() => onReset(null, 'password')}
+            onFocus={() => onReset('password')}
           />
           <View style={AuthStyles.buttonContainer}>
             <TouchableOpacity activeOpacity={0.8} style={AuthStyles.button} onPress={onRegister}>

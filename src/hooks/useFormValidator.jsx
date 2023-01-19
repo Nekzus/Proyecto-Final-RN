@@ -5,96 +5,76 @@ export const useFormValidator = (initialState) => {
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
 
-  const entries = Object.entries(state);
-
-  const validate = () => {
-    setIsValid(true);
-    entries.forEach(([key, value]) => {
-      if (key === 'name') {
-        if (value.trim().length === 0) {
-          setErrors((prevState) => ({
-            ...prevState,
-            [key]: 'El campo es obligatorio',
-          }));
-          setIsValid(false);
-        } else if (value.trim().length < 3) {
-          setErrors((prevState) => ({
-            ...prevState,
-            [key]: 'El nombre debe tener al menos 3 caracteres',
-          }));
-          setIsValid(false);
-        } else {
-          setErrors((prevState) => ({
-            ...prevState,
-            [key]: null,
-          }));
-        }
-      }
-
-      if (key === 'email') {
-        if (value.trim().length === 0) {
-          setErrors((prevState) => ({
-            ...prevState,
-            [key]: 'El campo es obligatorio',
-          }));
-          setIsValid(false);
-        } else if (!/\S+@\S+\.\S+/.test(value)) {
-          setErrors((prevState) => ({
-            ...prevState,
-            [key]: 'El email no es válido',
-          }));
-          setIsValid(false);
-        } else {
-          setErrors((prevState) => ({
-            ...prevState,
-            [key]: null,
-          }));
-        }
-      }
-
-      if (key === 'password') {
-        if (value.trim().length === 0) {
-          setErrors((prevState) => ({
-            ...prevState,
-            [key]: 'El campo es obligatorio',
-          }));
-          setIsValid(false);
-        } else if (value.trim().length < 6) {
-          setErrors((prevState) => ({
-            ...prevState,
-            [key]: 'La contraseña debe tener al menos 6 caracteres',
-          }));
-          setIsValid(false);
-        } else {
-          setErrors((prevState) => ({
-            ...prevState,
-            [key]: null,
-          }));
-        }
+  const onValidate = () => {
+    let newErrors = {};
+    let newIsValid = true;
+    const validations = {
+      name: {
+        minLength: {
+          message: 'El nombre debe tener al menos 3 caracteres',
+          test: (value) => value.trim().length < 3,
+        },
+      },
+      email: {
+        pattern: {
+          message: 'El email no es válido',
+          test: (value) => !/\S+@\S+\.\S+/.test(value),
+        },
+      },
+      password: {
+        minLength: {
+          message: 'La contraseña debe tener al menos 6 caracteres',
+          test: (value) => value.trim().length < 6,
+        },
+      },
+    };
+    Object.entries(state).forEach(([field, value]) => {
+      if (validations[field]) {
+        Object.entries(validations[field]).forEach(([key, { message, test }]) => {
+          if (test(value)) {
+            if (value.trim().length === 0) {
+              newErrors[field] = 'El campo es obligatorio';
+              newIsValid = false;
+              return;
+            }
+            newErrors[field] = message;
+            newIsValid = false;
+          } else {
+            newErrors[field] = '';
+          }
+        });
+      } else {
+        newErrors[field] = '';
       }
     });
+
+    setErrors(newErrors);
+    setIsValid(newIsValid);
+    return newIsValid;
   };
 
   const onChange = (value, field) => {
-    setState({
-      ...state,
-      [field]: value,
-    });
-  };
-
-  const setFormValue = (form) => {
-    setState(form);
-  };
-
-  const onReset = (value, field) => {
-    setErrors((prevState) => ({
+    setState((prevState) => ({
       ...prevState,
       [field]: value,
     }));
   };
 
+  const onReset = (field) => {
+    setErrors((prevState) => ({
+      ...prevState,
+      [field]: null,
+    }));
+  };
+
   const reset = () => {
-    setErrors(initialState);
+    setState(initialState);
+    setErrors({});
+    setIsValid(false);
+  };
+
+  const setFormValue = (form) => {
+    setState(form);
   };
 
   return {
@@ -104,7 +84,7 @@ export const useFormValidator = (initialState) => {
     setFormValue,
     errors,
     isValid,
-    validate,
+    onValidate,
     onReset,
     reset,
   };

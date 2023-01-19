@@ -1,4 +1,3 @@
-import { COLORS, ROUTES } from '../../constants';
 import { ErrorAlert, Logo } from '../../components';
 import {
   Keyboard,
@@ -6,14 +5,14 @@ import {
   Platform,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
 
 import { AuthStyles } from './AuthStyles';
 import Input from '../../components/Input';
+import { ROUTES } from '../../constants';
+import React from 'react';
 import { login } from '../../store';
 import { useDispatch } from 'react-redux';
 import { useFormValidator } from '../../hooks';
@@ -22,18 +21,19 @@ import { useTheme } from '@react-navigation/native';
 const LoginScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const dispatch = useDispatch();
-  const { email, password, onChange, errors, isValid, validate, onReset } = useFormValidator({
+  const { email, password, onChange, errors, onValidate, onReset } = useFormValidator({
     email: '',
     password: '',
   });
 
   const onLogin = () => {
+    const isValid = onValidate();
     Keyboard.dismiss();
-    validate();
     if (isValid) {
       dispatch(login({ email, password }));
     }
   };
+
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
       <ErrorAlert msg="Autentificación fallida" />
@@ -56,7 +56,7 @@ const LoginScreen = ({ navigation }) => {
             selectionColor={colors.notification}
             autoCapitalize="none"
             autoCorrect={false}
-            onFocus={() => onReset(null, 'email')}
+            onFocus={() => onReset('email')}
           />
           <Input
             label="Contraseña"
@@ -71,7 +71,7 @@ const LoginScreen = ({ navigation }) => {
             selectionColor={colors.notification}
             autoCapitalize="none"
             autoCorrect={false}
-            onFocus={() => onReset(null, 'password')}
+            onFocus={() => onReset('password')}
           />
           <View style={AuthStyles.buttonContainer}>
             <TouchableOpacity activeOpacity={0.8} style={AuthStyles.button} onPress={onLogin}>

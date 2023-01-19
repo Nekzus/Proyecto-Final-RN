@@ -1,6 +1,5 @@
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-
 import AlertsNavigator from './alert/AlertsNavigator';
+import { Ionicons as Icon } from '@expo/vector-icons';
 import ProfileNavigator from './profile/ProfileNavigator';
 import PublishNavigator from './publish/PublishNavigator';
 import { ROUTES } from '../constants';
@@ -34,7 +33,7 @@ const TabNavigator = () => {
         options={{
           title: `${ROUTES.SEARCH}`,
           tabBarIcon: ({ focused }) => (
-            <Ionicons name={focused ? 'home' : 'home-outline'} size={22} color={colors.text} />
+            <Icon name={focused ? 'search' : 'search-outline'} size={22} color={colors.text} />
           ),
         }}
       />
@@ -44,7 +43,11 @@ const TabNavigator = () => {
         options={{
           title: `${ROUTES.PUBLISH}`,
           tabBarIcon: ({ focused }) => (
-            <Ionicons name={focused ? 'home' : 'home-outline'} size={22} color={colors.text} />
+            <Icon
+              name={focused ? 'add-circle' : 'add-circle-outline'}
+              size={22}
+              color={colors.text}
+            />
           ),
         }}
       />
@@ -54,7 +57,11 @@ const TabNavigator = () => {
         options={{
           title: `${ROUTES.ALERTS}`,
           tabBarIcon: ({ focused }) => (
-            <Ionicons name={focused ? 'home' : 'home-outline'} size={22} color={colors.text} />
+            <Icon
+              name={focused ? 'alert-circle' : 'alert-circle-outline'}
+              size={22}
+              color={colors.text}
+            />
           ),
         }}
       />
@@ -65,7 +72,7 @@ const TabNavigator = () => {
           headerShown: false,
           title: `${ROUTES.PROFILE}`,
           tabBarIcon: ({ focused }) => (
-            <Ionicons name={focused ? 'home' : 'home-outline'} size={22} color={colors.text} />
+            <Icon name={focused ? 'person' : 'person-outline'} size={22} color={colors.text} />
           ),
         }}
       />

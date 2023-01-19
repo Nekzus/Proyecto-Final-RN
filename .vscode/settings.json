@@ -1,3 +1,3 @@
 {
-  "conventionalCommits.scopes": ["Login", "Register", "Profile", "Code"]
+  "conventionalCommits.scopes": ["Login", "Register", "Profile", "Code", "Publish"]
 }

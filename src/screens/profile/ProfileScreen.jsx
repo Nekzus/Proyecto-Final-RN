@@ -13,7 +13,7 @@ const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const {
-    user: { nombre, img, uid },
+    user: { nombre, email, img },
   } = useSelector((state) => state.auth);
 
   useEffect(() => {
@@ -37,6 +37,7 @@ const ProfileScreen = ({ navigation }) => {
         </View>
         <View style={styles.dataContainer}>
           <Text style={{ color: colors.text, fontSize: 22, fontWeight: 'bold' }}>{nombre}</Text>
+          <Text style={{ color: colors.text, fontSize: 17 }}>{email}</Text>
         </View>
         <View style={styles.iconContainer}>
           <TouchableOpacity
@@ -62,8 +63,8 @@ const ProfileScreen = ({ navigation }) => {
             navigation.navigate(ROUTES.MY_PUBLISH);
           }}
           style={styles.option}>
-          <Icon name="alert-box-outline" size={24} color={colors.text} />
-          <Text style={{ ...styles.optionText, color: colors.text }}>Mis anuncios</Text>
+          <Icon name="note-multiple" size={24} color={colors.text} />
+          <Text style={{ ...styles.optionText, color: colors.text }}>Mis publicaciones</Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
