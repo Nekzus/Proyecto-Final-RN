@@ -5,9 +5,19 @@ export const useFormValidator = (initialState) => {
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
 
-  const onValidate = () => {
+  const onValidate = (excluded) => {
     let newErrors = {};
     let newIsValid = true;
+    let excludedField = {};
+
+    excluded = excluded || {};
+    excludedField = Object.keys(excluded).reduce((acc, field) => {
+      acc[field] = true;
+      return acc;
+    }, {});
+
+    console.log({ excludedField });
+
     const validations = {
       name: {
         minLength: {
@@ -29,6 +39,9 @@ export const useFormValidator = (initialState) => {
       },
     };
     Object.entries(state).forEach(([field, value]) => {
+      if (excludedField[field]) {
+        return;
+      }
       if (validations[field]) {
         Object.entries(validations[field]).forEach(([key, { message, test }]) => {
           if (test(value)) {

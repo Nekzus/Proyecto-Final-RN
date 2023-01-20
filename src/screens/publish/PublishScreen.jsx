@@ -22,7 +22,8 @@ const PublishScreen = ({ navigation }) => {
             backgroundColor: colors.primary,
             borderRadius: 15,
             marginVertical: 20,
-            height: 125,
+            height: 125, //TODO: fix height to be dynamic
+            width: 320, //TODO: fix width to be dynamic
           }}>
           <Card.Title style={{ ...styles.textButton, color: colors.text }}>
             Mascota Perdida
@@ -41,7 +42,8 @@ const PublishScreen = ({ navigation }) => {
             backgroundColor: colors.primary,
             borderRadius: 15,
             marginVertical: 20,
-            height: 125,
+            height: 125, //TODO: fix height to be dynamic
+            width: 320, //TODO: fix width to be dynamic
           }}>
           <Card.Title style={{ ...styles.textButton, color: colors.text }}>
             Mascota Encontrada
@@ -60,7 +62,8 @@ const PublishScreen = ({ navigation }) => {
             backgroundColor: colors.primary,
             borderRadius: 15,
             marginVertical: 20,
-            height: 125,
+            height: 125, //TODO: fix height to be dynamic
+            width: 320, //TODO: fix width to be dynamic
           }}>
           <Card.Title style={{ ...styles.textButton, color: colors.text }}>
             Mascota en Adopción

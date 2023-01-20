@@ -60,7 +60,7 @@ export const login = ({ email, password }) => {
       await AsyncStorage.setItem('token', data.token);
     } catch (error) {
       if (!error.response) return;
-      dispatch(addError(error.response.data.msg || error.response.data.errors[0].msg));
+      dispatch(addError(error.response.data.msg || error.response));
     }
   };
 };

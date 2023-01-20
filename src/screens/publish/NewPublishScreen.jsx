@@ -1,17 +1,9 @@
-import {
-  KeyboardAvoidingView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
 import React, { useEffect } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Alert } from 'react-native';
 import { Image } from 'react-native';
 import Input from '../../components/Input';
-import { Platform } from 'react-native';
 import { useFormValidator } from '../../hooks/useFormValidator';
 import { useState } from 'react';
 import { useTheme } from '@react-navigation/native';
@@ -19,6 +11,18 @@ import { useTheme } from '@react-navigation/native';
 const NewPublishScreen = ({ navigation, route }) => {
   const { title, type } = route.params;
   const { colors } = useTheme();
+  const validateExcluded = {
+    label,
+    typeAnimals,
+    race,
+    sex,
+    appearance,
+    identification,
+    date,
+    zone,
+    description,
+    phone,
+  };
 
   const {
     label,
@@ -71,12 +75,25 @@ const NewPublishScreen = ({ navigation, route }) => {
   };
 
   const onPublish = () => {
-    const isValid = onValidate();
-    console.log({ isValid });
+    const isValid = onValidate(validateExcluded);
+
     if (!isValid) {
-      Alert.alert('Error', 'Todos los campos son requeridos.');
+      Alert.alert('Completar campos', 'Completar los campos requeridos.');
       return;
     }
+
+    console.log({
+      label,
+      typeAnimals,
+      race,
+      sex,
+      appearance,
+      identification,
+      date,
+      zone,
+      description,
+      phone,
+    });
 
     // Aquí iría la lógica para enviar la información al servidor.
     // Puedes utilizar una librería como axios para hacer las peticiones HTTP.
@@ -101,150 +118,146 @@ const NewPublishScreen = ({ navigation, route }) => {
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <View style={styles.container}>
-          <View style={styles.subContainer}>
-            <Text style={{ color: colors.text, marginVertical: 5 }}>Añadir fotos:</Text>
-            <View style={styles.fotosContainer}>
-              {images.map((image, index) => (
-                <Image key={index} source={{ uri: image }} style={styles.foto} />
-              ))}
-              <TouchableOpacity onPress={seleccionarFotos}>
-                <View style={styles.agregarFotoBtn}>
-                  <Text style={styles.agregarFotoBtnText}>+</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+      <View style={styles.container}>
+        <View style={styles.subContainer}>
+          <Text style={{ color: colors.text, marginVertical: 5 }}>Añadir fotos:</Text>
+          <View style={styles.fotosContainer}>
+            {images.map((image, index) => (
+              <Image key={index} source={{ uri: image }} style={styles.foto} />
+            ))}
+            <TouchableOpacity onPress={seleccionarFotos}>
+              <View style={styles.agregarFotoBtn}>
+                <Text style={styles.agregarFotoBtnText}>+</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-          <View style={styles.subContainer}>
-            <Input
-              error={errors.label}
-              label="Título:"
-              onChangeText={(value) => onChange(value, 'label')}
-              onFocus={() => onReset('label')}
-              placeholder="Ingresa un título para tu publicación"
-              onSubmitEditing={onPublish}
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              value={label}
-            />
-          </View>
-          <View style={styles.subContainer}>
-            <Input
-              error={errors.typeAnimals}
-              label="Tipo de animal:"
-              onChangeText={(value) => onChange(value, 'typeAnimals')}
-              onFocus={() => onReset('typeAnimals')}
-              placeholder="Ingresa el tipo de animal"
-              onSubmitEditing={onPublish}
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              value={typeAnimals}
-            />
-          </View>
-          <View style={styles.subContainer}>
-            <Input
-              error={errors.race}
-              label="Raza:"
-              onChangeText={(value) => onChange(value, 'race')}
-              onFocus={() => onReset('race')}
-              placeholder="Ingresa la raza del animal"
-              onSubmitEditing={onPublish}
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              value={race}
-            />
-          </View>
-          <View style={styles.subContainer}>
-            <Input
-              error={errors.sex}
-              label="Sexo:"
-              onChangeText={(value) => onChange(value, 'sex')}
-              onFocus={() => onReset('sex')}
-              placeholder="Ingresa el sexo del animal"
-              onSubmitEditing={onPublish}
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              value={sex}
-            />
-          </View>
-          <View style={styles.subContainer}>
-            <Input
-              error={errors.appearance}
-              label="Apariencia:"
-              onChangeText={(value) => onChange(value, 'appearance')}
-              onFocus={() => onReset('appearance')}
-              placeholder="Ingresa una descripción de la apariencia del animal"
-              onSubmitEditing={onPublish}
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              value={appearance}
-            />
-          </View>
-          <View style={styles.subContainer}>
-            <Input
-              error={errors.identification}
-              label="Identificación:"
-              onChangeText={(value) => onChange(value, 'identification')}
-              onFocus={() => onReset('identification')}
-              placeholder="Ingresa algún tipo de identificación del animal"
-              onSubmitEditing={onPublish}
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              value={identification}
-            />
-          </View>
-          <View style={styles.subContainer}>
-            <Input
-              error={errors.phone}
-              label="¿Cuando sucedio? :"
-              onChangeText={(value) => onChange(value, 'date')}
-              onFocus={() => onReset('date')}
-              placeholder="Ingresa la fecha en la que el animal se perdió"
-              onSubmitEditing={onPublish}
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              value={date}
-            />
-          </View>
-          <View style={styles.subContainer}>
-            <Input
-              error={errors.zone}
-              label="¿En qué zona se ha perdido? :"
-              onChangeText={(value) => onChange(value, 'zone')}
-              onFocus={() => onReset('zone')}
-              placeholder="Ingresa la zona en la que el animal se perdió"
-              onSubmitEditing={onPublish}
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              value={zone}
-            />
-          </View>
-          <View style={styles.subContainer}>
-            <Input
-              error={errors.description}
-              label="Añade una descripción:"
-              multiline={true}
-              onChangeText={(value) => onChange(value, 'description')}
-              onFocus={() => onReset('description')}
-              onSubmitEditing={onPublish}
-              placeholder="Ingresa una descripción detallada del animal y las circunstancias de su pérdida"
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              value={description}
-            />
-          </View>
-          <View style={styles.subContainer}>
-            <Input
-              error={errors.phone}
-              keyboardType="numeric"
-              label="Teléfono de contacto:"
-              onChangeText={(value) => onChange(value, 'phone')}
-              onFocus={() => onReset('phone')}
-              onSubmitEditing={onPublish}
-              placeholder="Ingresa tu teléfono para que te podamos contactar"
-              placeholderTextColor="rgba(255,255,255,0.4)"
-              value={phone}
-            />
-          </View>
-          <TouchableOpacity style={styles.publicarBtn} onPress={onPublish}>
-            <Text style={styles.publicarBtnText}>Publicar</Text>
-          </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+        <View style={styles.subContainer}>
+          <Input
+            error={errors.label}
+            label="Título:"
+            onChangeText={(value) => onChange(value, 'label')}
+            onFocus={() => onReset('label')}
+            placeholder="Ingresa un título para tu publicación"
+            onSubmitEditing={onPublish}
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            value={label}
+          />
+        </View>
+        <View style={styles.subContainer}>
+          <Input
+            error={errors.typeAnimals}
+            label="Tipo de animal:"
+            onChangeText={(value) => onChange(value, 'typeAnimals')}
+            onFocus={() => onReset('typeAnimals')}
+            placeholder="Ingresa el tipo de animal"
+            onSubmitEditing={onPublish}
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            value={typeAnimals}
+          />
+        </View>
+        <View style={styles.subContainer}>
+          <Input
+            error={errors.race}
+            label="Raza:"
+            onChangeText={(value) => onChange(value, 'race')}
+            onFocus={() => onReset('race')}
+            placeholder="Ingresa la raza del animal"
+            onSubmitEditing={onPublish}
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            value={race}
+          />
+        </View>
+        <View style={styles.subContainer}>
+          <Input
+            error={errors.sex}
+            label="Sexo:"
+            onChangeText={(value) => onChange(value, 'sex')}
+            onFocus={() => onReset('sex')}
+            placeholder="Ingresa el sexo del animal"
+            onSubmitEditing={onPublish}
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            value={sex}
+          />
+        </View>
+        <View style={styles.subContainer}>
+          <Input
+            error={errors.appearance}
+            label="Apariencia:"
+            onChangeText={(value) => onChange(value, 'appearance')}
+            onFocus={() => onReset('appearance')}
+            placeholder="Ingresa una descripción de la apariencia del animal"
+            onSubmitEditing={onPublish}
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            value={appearance}
+          />
+        </View>
+        <View style={styles.subContainer}>
+          <Input
+            error={errors.identification}
+            label="Identificación:"
+            onChangeText={(value) => onChange(value, 'identification')}
+            onFocus={() => onReset('identification')}
+            placeholder="Ingresa algún tipo de identificación del animal"
+            onSubmitEditing={onPublish}
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            value={identification}
+          />
+        </View>
+        <View style={styles.subContainer}>
+          <Input
+            error={errors.date}
+            label="¿Cuando sucedio? :"
+            onChangeText={(value) => onChange(value, 'date')}
+            onFocus={() => onReset('date')}
+            placeholder="Ingresa la fecha en la que el animal se perdió"
+            onSubmitEditing={onPublish}
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            value={date}
+          />
+        </View>
+        <View style={styles.subContainer}>
+          <Input
+            error={errors.zone}
+            label="¿En qué zona se ha perdido? :"
+            onChangeText={(value) => onChange(value, 'zone')}
+            onFocus={() => onReset('zone')}
+            placeholder="Ingresa la zona en la que el animal se perdió"
+            onSubmitEditing={onPublish}
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            value={zone}
+          />
+        </View>
+        <View style={styles.subContainer}>
+          <Input
+            error={errors.description}
+            label="Añade una descripción:"
+            multiline={true}
+            onChangeText={(value) => onChange(value, 'description')}
+            onFocus={() => onReset('description')}
+            onSubmitEditing={onPublish}
+            placeholder="Ingresa una descripción detallada del animal y las circunstancias de su pérdida"
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            value={description}
+          />
+        </View>
+        <View style={styles.subContainer}>
+          <Input
+            error={errors.phone}
+            keyboardType="numeric"
+            label="Teléfono de contacto:"
+            onChangeText={(value) => onChange(value, 'phone')}
+            onFocus={() => onReset('phone')}
+            onSubmitEditing={onPublish}
+            placeholder="Ingresa tu teléfono para que te podamos contactar"
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            value={phone}
+          />
+        </View>
+        <TouchableOpacity style={styles.publicarBtn} onPress={onPublish}>
+          <Text style={styles.publicarBtnText}>Publicar</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
