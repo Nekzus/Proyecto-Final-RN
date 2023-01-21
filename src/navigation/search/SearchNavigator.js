@@ -1,4 +1,10 @@
-import { DetailScreen, FilterScreen, SearchMapScreen, SearchScreen } from '../../screens';
+import {
+  DetailScreen,
+  FilterScreen,
+  PublishDetailScreen,
+  SearchMapScreen,
+  SearchScreen,
+} from '../../screens';
 
 import { ROUTES } from '../../constants';
 import SearchTabNavigator from './SearchTabNavigator';
@@ -43,6 +49,11 @@ const SearchNavigator = () => {
         name={ROUTES.FILTER}
         component={FilterScreen}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name={ROUTES.PUBLISH_DETAIL}
+        component={PublishDetailScreen}
+        options={{ headerShown: true }}
       />
     </Stack.Navigator>
   );

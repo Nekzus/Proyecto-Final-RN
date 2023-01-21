@@ -1,7 +1,7 @@
 import { COLORS, ROUTES } from '../../constants';
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { askPermissionCamera, askPermissionLocation, logout, updateProfile } from '../../store';
+import { askPermissionCamera, askPermissionLocation, logout, persistor } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Avatar } from '@rneui/themed';

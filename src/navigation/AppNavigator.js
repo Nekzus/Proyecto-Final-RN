@@ -1,3 +1,4 @@
+import { checkToken, getCategories } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AuthNavigator from './AuthNavigator';
@@ -5,7 +6,6 @@ import { LoadingScreen } from '../screens';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
 import TabNavigator from './TabNavigator';
-import { checkToken } from '../store';
 import { useEffect } from 'react';
 import { useTheme } from '@react-navigation/native';
 
@@ -16,6 +16,10 @@ const AppNavigator = () => {
 
   useEffect(() => {
     dispatch(checkToken());
+  }, []);
+
+  useEffect(() => {
+    dispatch(getCategories());
   }, []);
 
   if (status === 'checking') return <LoadingScreen />;

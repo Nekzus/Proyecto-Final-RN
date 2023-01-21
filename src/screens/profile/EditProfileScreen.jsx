@@ -32,8 +32,9 @@ const EditProfileScreen = ({ navigation }) => {
 
   const {
     user: { nombre, img, uid },
-    loading,
   } = useSelector((state) => state.auth);
+
+  const { loading } = useSelector((state) => state.errors);
 
   useEffect(() => {
     navigation.getParent().setOptions({

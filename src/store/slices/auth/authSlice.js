@@ -5,17 +5,9 @@ export const authSlice = createSlice({
   initialState: {
     status: 'checking',
     token: null,
-    errorMessage: '',
     user: null,
-    loading: false,
   },
   reducers: {
-    addError: (state, { payload }) => {
-      state.status = 'not-authenticated';
-      state.token = null;
-      state.user = null;
-      state.errorMessage = payload;
-    },
     logOff: (state) => {
       state.status = 'not-authenticated';
       state.token = null;
@@ -26,17 +18,12 @@ export const authSlice = createSlice({
       state.token = null;
       state.user = null;
     },
-    removeError: (state) => {
-      state.errorMessage = '';
-    },
     signIn: (state, { payload }) => {
-      state.errorMessage = '';
       state.status = 'authenticated';
       state.token = payload.token;
       state.user = payload.user;
     },
     signUp: (state, { payload }) => {
-      state.errorMessage = '';
       state.status = 'authenticated';
       state.token = payload.token;
       state.user = payload.user;
@@ -44,20 +31,7 @@ export const authSlice = createSlice({
     updateUser: (state, { payload }) => {
       state.user = payload;
     },
-    loadingData: (state, { payload }) => {
-      state.loading = payload;
-    },
   },
 });
 
-export const {
-  addError,
-  logOff,
-  notAuthenticated,
-  removeError,
-  signIn,
-  signUp,
-  updateUser,
-  loadingData,
-  greetingChange,
-} = authSlice.actions;
+export const { logOff, notAuthenticated, signIn, signUp, updateUser } = authSlice.actions;

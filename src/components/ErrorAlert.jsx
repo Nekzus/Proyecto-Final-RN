@@ -6,7 +6,7 @@ import { errorClear } from '../store';
 
 const ErrorAlert = ({ msg }) => {
   const dispatch = useDispatch();
-  const { errorMessage } = useSelector((state) => state.auth);
+  const { errorMessage } = useSelector((state) => state.errors);
   const errorMsg = () => dispatch(errorClear());
   useEffect(() => {
     if (errorMessage.length === 0) {

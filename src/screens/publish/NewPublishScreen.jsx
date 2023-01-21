@@ -1,18 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert } from 'react-native';
+import { ErrorAlert } from '../../components';
 import { Image } from 'react-native';
 import Input from '../../components/Input';
+import { postPublication } from '../../store/slices/publish/thunks';
 import { useFormValidator } from '../../hooks/useFormValidator';
-import { useState } from 'react';
 import { useTheme } from '@react-navigation/native';
 
 const NewPublishScreen = ({ navigation, route }) => {
-  const { title, type } = route.params;
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.publish);
+  const { errorMessage } = useSelector((state) => state.errors);
+  const [tempUri, setTempUri] = useState();
+  const { id = '', title, type } = route.params;
   const { colors } = useTheme();
+
+  const typeTemp = categories.find((category) => category.nombre === type.toUpperCase());
+
+  const typeId = typeTemp ? typeTemp._id : '';
+
   const validateExcluded = {
-    label,
+    _id,
+    image,
     typeAnimals,
     race,
     sex,
@@ -25,84 +37,39 @@ const NewPublishScreen = ({ navigation, route }) => {
   };
 
   const {
-    label,
-    typeAnimals,
-    race,
-    sex,
+    _id,
     appearance,
-    identification,
     date,
-    zone,
     description,
+    errors,
+    identification,
+    image,
+    label,
     phone,
+    race,
+    reset,
+    sex,
+    typeAnimals,
+    zone,
     onChange,
     onReset,
-    reset,
-    errors,
     onValidate,
+    setFormValue,
   } = useFormValidator({
+    _id: id,
+    appearance: '',
+    date: '',
+    description: '',
+    identification: '',
+    image: '',
     label: '',
-    typeAnimals: '',
+    phone: '',
     race: '',
     sex: '',
-    appearance: '',
-    identification: '',
-    date: '',
+    typeAnimals: '',
     zone: '',
-    description: '',
-    phone: '',
   });
 
-  const [images, setFotos] = useState([]);
-
-  const seleccionarFotos = async () => {
-    const fotosPermitidas = await ImagePicker.requestCameraRollPermissionsAsync();
-    if (fotosPermitidas.granted) {
-      const fotosSeleccionadas = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsMultipleSelection: true,
-        quality: 0.5,
-      });
-      if (!fotosSeleccionadas.cancelled) {
-        setFotos([...fotos, ...fotosSeleccionadas.uri]);
-      }
-    } else {
-      Alert.alert(
-        'Permiso denegado',
-        'Es necesario permitir el acceso a la librería de imágenes para seleccionar fotos.'
-      );
-    }
-  };
-
-  const onPublish = () => {
-    const isValid = onValidate(validateExcluded);
-
-    if (!isValid) {
-      Alert.alert('Completar campos', 'Completar los campos requeridos.');
-      return;
-    }
-
-    console.log({
-      label,
-      typeAnimals,
-      race,
-      sex,
-      appearance,
-      identification,
-      date,
-      zone,
-      description,
-      phone,
-    });
-
-    // Aquí iría la lógica para enviar la información al servidor.
-    // Puedes utilizar una librería como axios para hacer las peticiones HTTP.
-
-    Alert.alert('Publicación exitosa', 'Tu publicación ha sido cargada con éxito.');
-    reset();
-  };
-
-  console.log({ title, type });
   useEffect(() => {
     navigation.getParent().setOptions({
       tabBarStyle: { display: 'none' },
@@ -116,8 +83,85 @@ const NewPublishScreen = ({ navigation, route }) => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   loadPublication();
+  // }, []);
+
+  // const loadPublication = async () => {
+  //   if (id.length === 0) return;
+  //   const product = await loadProductById(id);
+  //   setFormValue({
+  //     _id: id,
+  //     type: product.categoria._id,
+  //     image: product.img || '',
+  //     nombre,
+  //   });
+  // };
+
+  console.log({ categories });
+
+  const [images, setImage] = useState([]);
+
+  // const seleccionarFotos = async () => {
+  //   const fotosPermitidas = await ImagePicker.requestCameraRollPermissionsAsync();
+  //   if (fotosPermitidas.granted) {
+  //     const fotosSeleccionadas = await ImagePicker.launchImageLibraryAsync({
+  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //       allowsMultipleSelection: true,
+  //       quality: 0.5,
+  //     });
+  //     if (!fotosSeleccionadas.cancelled) {
+  //       setFotos([...fotos, ...fotosSeleccionadas.uri]);
+  //     }
+  //   } else {
+  //     Alert.alert(
+  //       'Permiso denegado',
+  //       'Es necesario permitir el acceso a la librería de imágenes para seleccionar fotos.'
+  //     );
+  //   }
+  // };
+
+  const onPublish = () => {
+    const isValid = onValidate(validateExcluded);
+
+    if (!isValid) {
+      Alert.alert('Completar campos', 'Completar los campos requeridos.');
+      return;
+    }
+
+    dispatch(postPublication({ label, typeId, phone }));
+
+    console.log({
+      label,
+      typeAnimals,
+      race,
+      type,
+      sex,
+      appearance,
+      identification,
+      date,
+      zone,
+      description,
+      phone,
+    });
+
+    // Aquí iría la lógica para enviar la información al servidor.
+    // Puedes utilizar una librería como axios para hacer las peticiones HTTP.
+
+    Alert.alert('Publicación exitosa', 'Tu publicación ha sido cargada con éxito.', [
+      {
+        text: 'ok',
+        onPress: () => {
+          navigation.goBack();
+        },
+      },
+    ]);
+    reset();
+  };
+
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+      <ErrorAlert msg="Publicación fallida" />
       <View style={styles.container}>
         <View style={styles.subContainer}>
           <Text style={{ color: colors.text, marginVertical: 5 }}>Añadir fotos:</Text>
@@ -125,7 +169,7 @@ const NewPublishScreen = ({ navigation, route }) => {
             {images.map((image, index) => (
               <Image key={index} source={{ uri: image }} style={styles.foto} />
             ))}
-            <TouchableOpacity onPress={seleccionarFotos}>
+            <TouchableOpacity onPress={() => {}}>
               <View style={styles.agregarFotoBtn}>
                 <Text style={styles.agregarFotoBtnText}>+</Text>
               </View>

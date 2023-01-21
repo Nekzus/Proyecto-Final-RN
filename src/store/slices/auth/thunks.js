@@ -1,13 +1,5 @@
-import {
-  addError,
-  loadingData,
-  logOff,
-  notAuthenticated,
-  removeError,
-  signIn,
-  signUp,
-  updateUser,
-} from './authSlice';
+import { errorClear, errorState } from '../error-load';
+import { logOff, notAuthenticated, signIn, signUp, updateUser } from './authSlice';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import petQuestApi from '../../../api/petQuestApi';
@@ -33,14 +25,8 @@ export const checkToken = () => {
       );
     } catch (error) {
       if (!error.response) return;
-      dispatch(addError(error.response.data.msg || error.response.data.errors[0].msg));
+      dispatch(errorState(error.response.data.msg || error.response.data.errors[0].msg));
     }
-  };
-};
-
-export const errorClear = () => {
-  return (dispatch) => {
-    dispatch(removeError());
   };
 };
 
@@ -57,10 +43,11 @@ export const login = ({ email, password }) => {
           user: data.usuario,
         })
       );
+      dispatch(errorClear());
       await AsyncStorage.setItem('token', data.token);
     } catch (error) {
       if (!error.response) return;
-      dispatch(addError(error.response.data.msg || error.response));
+      dispatch(errorState(error.response.data.msg || error.response.data.errors[0].msg));
     }
   };
 };
@@ -70,9 +57,10 @@ export const logout = () => {
     try {
       await AsyncStorage.removeItem('token');
       dispatch(logOff());
+      dispatch(errorClear());
     } catch (error) {
       if (!error.response) return;
-      dispatch(addError(error.response.data.msg || error.response.data.errors[0].msg));
+      dispatch(errorState(error.response.data.msg || error.response.data.errors[0].msg));
     }
   };
 };
@@ -92,9 +80,10 @@ export const register = ({ nombre, email, password }) => {
           user: data.usuario,
         })
       );
+      dispatch(errorClear());
     } catch (error) {
       if (!error.response) return;
-      dispatch(addError(error.response.data.msg || error.response.data.errors[0].msg));
+      dispatch(errorState(error.response.data.msg || error.response.data.errors[0].msg));
     }
   };
 };
@@ -109,13 +98,7 @@ export const updateProfile = ({ name, uid }) => {
       dispatch(updateUser(data));
     } catch (error) {
       if (!error.response) return;
-      dispatch(addError(error.response.data.msg || error.response.data.errors[0].msg));
+      dispatch(errorState(error.response.data.msg || error.response.data.errors[0].msg));
     }
-  };
-};
-
-export const loadingState = (state) => {
-  return (dispatch) => {
-    dispatch(loadingData(state));
   };
 };
