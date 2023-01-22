@@ -18,9 +18,6 @@ const AuthNavigator = () => {
         headerStyle: {
           backgroundColor: colors.card,
         },
-        // headerTitleStyle: {
-        //   fontFamily: fonts.title,
-        // },
         headerTitleAlign: 'center',
       }}>
       <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} options={{ headerShown: false }} />

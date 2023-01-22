@@ -1,7 +1,5 @@
 export * from './auth/AuthStyles';
 export * from './auth/LoadingScreen';
-export { default as AlertsScreen } from './alerts/AlertsScreen';
-export { default as InfoAlertsScreen } from './alerts/InfoAlertsScreen';
 export { default as LoginScreen } from './auth/LoginScreen';
 export { default as RegisterScreen } from './auth/RegisterScreen';
 export { default as DetailScreen } from './detail/DetailScreen';

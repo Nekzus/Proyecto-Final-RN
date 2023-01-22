@@ -94,7 +94,6 @@ export const updateProfile = ({ name, uid }) => {
       const { data } = await petQuestApi.put(`/usuarios/${uid}`, {
         nombre: name,
       });
-      console.log(data.usuario);
       dispatch(updateUser(data));
     } catch (error) {
       if (!error.response) return;

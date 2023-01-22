@@ -2,7 +2,7 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import React, { useEffect } from 'react';
 import { getMyPublications, getPublicationById } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation, useNavigationState, useTheme } from '@react-navigation/native';
+import { useNavigationState, useTheme } from '@react-navigation/native';
 
 import { Card } from '@rneui/base';
 import { ErrorAlert } from '../../components';
@@ -19,7 +19,6 @@ const MyPublishScreen = ({ navigation }) => {
   const routes = useNavigationState((state) => state.routes.length);
 
   useEffect(() => {
-    console.log({ navigation });
     navigation.getParent().setOptions({
       tabBarStyle: { display: 'none' },
       headerShown: false,

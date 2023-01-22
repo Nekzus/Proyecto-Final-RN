@@ -1,4 +1,3 @@
-import AlertsNavigator from './alert/AlertsNavigator';
 import { Ionicons as Icon } from '@expo/vector-icons';
 import ProfileNavigator from './profile/ProfileNavigator';
 import PublishNavigator from './publish/PublishNavigator';
@@ -45,20 +44,6 @@ const TabNavigator = () => {
           tabBarIcon: ({ focused }) => (
             <Icon
               name={focused ? 'add-circle' : 'add-circle-outline'}
-              size={22}
-              color={colors.text}
-            />
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name={ROUTES.ALERTS}
-        component={AlertsNavigator}
-        options={{
-          title: `${ROUTES.ALERTS}`,
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              name={focused ? 'alert-circle' : 'alert-circle-outline'}
               size={22}
               color={colors.text}
             />

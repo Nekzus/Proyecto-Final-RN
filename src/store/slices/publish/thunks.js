@@ -115,7 +115,6 @@ export const putPublication = (data) => {
 export const getPublicationById = (id) => {
   return async (dispatch) => {
     try {
-      console.log('getPublicationById', id);
       dispatch(loadingState(true));
       const { data } = await petQuestApi.get(`/productos/${id}`);
       dispatch(loadPublicationById(data));

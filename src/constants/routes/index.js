@@ -1,7 +1,4 @@
 export default {
-  ALERTS_INFO: 'Alerts Information',
-  ALERTS_LIST: 'Alerts List',
-  ALERTS: 'Alertas',
   DETAIL: 'Detail',
   EDIT_PROFILE: 'Editar perfil',
   FILTER: 'Filter',

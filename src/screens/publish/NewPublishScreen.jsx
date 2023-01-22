@@ -19,8 +19,6 @@ const NewPublishScreen = ({ navigation, route }) => {
   const { type } = route.params;
   const { colors } = useTheme();
 
-  console.log({ type });
-
   const typeTemp = categories.find((category) => category.nombre === type.toUpperCase());
 
   const typeIde = typeTemp ? typeTemp._id : '';
@@ -83,7 +81,6 @@ const NewPublishScreen = ({ navigation, route }) => {
 
   const onPublish = () => {
     const isValid = onValidate(validateExcluded);
-    console.log({ isValid });
     if (!isValid) {
       Alert.alert('Completar campos', 'Completar los campos requeridos.');
       return;

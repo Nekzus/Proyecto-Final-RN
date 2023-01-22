@@ -16,8 +16,6 @@ export const useFormValidator = (initialState) => {
       return acc;
     }, {});
 
-    console.log({ excludedField });
-
     const validations = {
       name: {
         minLength: {
