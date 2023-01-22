@@ -4,6 +4,7 @@ import {
   MyPublishScreen,
   ProfileScreen,
   SettingsScreen,
+  UpdatePublishScreen,
 } from '../../screens';
 
 import { ROUTES } from '../../constants';
@@ -48,6 +49,14 @@ const ProfileNavigator = () => {
         name={ROUTES.MY_PUBLISH}
         component={MyPublishScreen}
         options={{ headerShown: true }}
+      />
+      <Stack.Screen
+        name={ROUTES.UPDATE_PUBLISH}
+        component={UpdatePublishScreen}
+        options={({ route }) => ({
+          title: `${route.params.title}`,
+          headerShown: true,
+        })}
       />
       <Stack.Screen
         name={ROUTES.SETTINGS}

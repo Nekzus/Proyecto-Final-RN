@@ -7,25 +7,27 @@ import { ErrorAlert } from '../../components';
 import { Image } from 'react-native';
 import Input from '../../components/Input';
 import { LoadingScreen } from '../auth/LoadingScreen';
-import { postPublication } from '../../store/slices/publish/thunks';
+import { ROUTES } from '../../constants';
+import { putPublication } from '../../store/slices/publish/thunks';
 import { useFormValidator } from '../../hooks/useFormValidator';
 import { useTheme } from '@react-navigation/native';
 
-const NewPublishScreen = ({ navigation, route }) => {
+const UpdatePublishScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const { categories } = useSelector((state) => state.publish);
+  const { categories, publication } = useSelector((state) => state.publish);
   const { loading } = useSelector((state) => state.errors);
   const [tempUri, setTempUri] = useState();
-  const { type } = route.params;
+  const { id = '', type } = route.params;
   const { colors } = useTheme();
 
-  console.log({ type });
+  console.log({ id, type, publication });
 
   const typeTemp = categories.find((category) => category.nombre === type.toUpperCase());
 
   const typeIde = typeTemp ? typeTemp._id : '';
 
   const validateExcluded = {
+    _id,
     image,
     typeAnimal,
     race,
@@ -38,6 +40,7 @@ const NewPublishScreen = ({ navigation, route }) => {
   };
 
   const {
+    _id,
     date,
     description,
     errors,
@@ -53,8 +56,10 @@ const NewPublishScreen = ({ navigation, route }) => {
     onChange,
     onReset,
     onValidate,
+    setFormValue,
     form,
   } = useFormValidator({
+    _id: id,
     date: '',
     description: '',
     identification: false,
@@ -81,22 +86,43 @@ const NewPublishScreen = ({ navigation, route }) => {
     };
   }, []);
 
-  const onPublish = () => {
+  useEffect(() => {
+    loadPublication();
+  }, [id, publication]);
+
+  const loadPublication = async () => {
+    if (id.length === 0 || publication === null) return;
+    await setFormValue({
+      _id: publication._id,
+      date: publication.date,
+      description: publication.description,
+      identification: publication.identification,
+      image: publication.img,
+      title: publication.title,
+      phone: publication.phone,
+      race: publication.race,
+      sex: publication.sex,
+      typeAnimal: publication.typeanimal,
+      zone: publication.location,
+      typeId: publication.categoria._id,
+    });
+    console.log({ form });
+  };
+
+  const onUpdate = () => {
     const isValid = onValidate(validateExcluded);
-    console.log({ isValid });
     if (!isValid) {
       Alert.alert('Completar campos', 'Completar los campos requeridos.');
       return;
     }
+    dispatch(putPublication(form));
 
-    dispatch(postPublication(form));
-
-    Alert.alert('Publicación exitosa', 'Tu publicación ha sido cargada con éxito.', [
+    Alert.alert(' Actualización exitosa', 'Tu publicación ha sido cargada con éxito.', [
       {
         text: 'ok',
         onPress: () => {
           // navigation.navigate(ROUTES.PROFILE, { screen: ROUTES.MY_PUBLISH }); // TODO: revisar problema retorno navegacion
-          navigation.goBack(); // TODO: revisar problema retorno navegacion
+          navigation.navigate(ROUTES.MY_PUBLISH); // TODO: revisar problema retorno navegacion
         },
       },
     ]);
@@ -150,7 +176,7 @@ const NewPublishScreen = ({ navigation, route }) => {
             onChangeText={(value) => onChange(value, 'title')}
             onFocus={() => onReset('title')}
             placeholder="Ingresa un título para tu publicación"
-            onSubmitEditing={onPublish}
+            onSubmitEditing={onUpdate}
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={title}
           />
@@ -162,7 +188,7 @@ const NewPublishScreen = ({ navigation, route }) => {
             onChangeText={(value) => onChange(value, 'typeAnimal')}
             onFocus={() => onReset('typeAnimal')}
             placeholder="Ingresa el tipo de animal"
-            onSubmitEditing={onPublish}
+            onSubmitEditing={onUpdate}
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={typeAnimal}
           />
@@ -174,7 +200,7 @@ const NewPublishScreen = ({ navigation, route }) => {
             onChangeText={(value) => onChange(value, 'race')}
             onFocus={() => onReset('race')}
             placeholder="Ingresa la raza del animal"
-            onSubmitEditing={onPublish}
+            onSubmitEditing={onUpdate}
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={race}
           />
@@ -186,7 +212,7 @@ const NewPublishScreen = ({ navigation, route }) => {
             onChangeText={(value) => onChange(value, 'sex')}
             onFocus={() => onReset('sex')}
             placeholder="Ingresa el sexo del animal"
-            onSubmitEditing={onPublish}
+            onSubmitEditing={onUpdate}
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={sex}
           />
@@ -198,7 +224,7 @@ const NewPublishScreen = ({ navigation, route }) => {
             onChangeText={(value) => onChange(value, 'identification')}
             onFocus={() => onReset('identification')}
             placeholder="Ingresa algún tipo de identificación del animal"
-            onSubmitEditing={onPublish}
+            onSubmitEditing={onUpdate}
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={identification}
           />
@@ -210,7 +236,7 @@ const NewPublishScreen = ({ navigation, route }) => {
             onChangeText={(value) => onChange(value, 'date')}
             onFocus={() => onReset('date')}
             placeholder="Ingresa la fecha en la que el animal se perdió"
-            onSubmitEditing={onPublish}
+            onSubmitEditing={onUpdate}
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={date}
           />
@@ -222,7 +248,7 @@ const NewPublishScreen = ({ navigation, route }) => {
             onChangeText={(value) => onChange(value, 'zone')}
             onFocus={() => onReset('zone')}
             placeholder="Ingresa la zona en la que el animal se perdió"
-            onSubmitEditing={onPublish}
+            onSubmitEditing={onUpdate}
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={zone}
           />
@@ -234,7 +260,7 @@ const NewPublishScreen = ({ navigation, route }) => {
             multiline={true}
             onChangeText={(value) => onChange(value, 'description')}
             onFocus={() => onReset('description')}
-            onSubmitEditing={onPublish}
+            onSubmitEditing={onUpdate}
             placeholder="Ingresa una descripción detallada del animal y las circunstancias de su pérdida"
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={description}
@@ -247,21 +273,21 @@ const NewPublishScreen = ({ navigation, route }) => {
             label="Teléfono de contacto:"
             onChangeText={(value) => onChange(value, 'phone')}
             onFocus={() => onReset('phone')}
-            onSubmitEditing={onPublish}
+            onSubmitEditing={onUpdate}
             placeholder="Ingresa tu teléfono para que te podamos contactar"
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={phone}
           />
         </View>
-        <TouchableOpacity style={styles.publishBtn} onPress={onPublish}>
-          <Text style={styles.publishBtnText}>Publicar</Text>
+        <TouchableOpacity style={styles.updateBtn} onPress={onUpdate}>
+          <Text style={styles.updateBtnText}>Actualizar</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
 
-export default NewPublishScreen;
+export default UpdatePublishScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -293,13 +319,13 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: '#ccc',
   },
-  publishBtn: {
+  updateBtn: {
     backgroundColor: '#0099ff',
     padding: 10,
     alignItems: 'center',
     marginTop: 20,
   },
-  publishBtnText: {
+  updateBtnText: {
     color: '#fff',
     fontWeight: 'bold',
   },

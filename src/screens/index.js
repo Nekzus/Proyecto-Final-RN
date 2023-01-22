@@ -13,6 +13,7 @@ export { default as MyPublishScreen } from './publish/MyPublishScreen';
 export { default as NewPublishScreen } from './publish/NewPublishScreen';
 export { default as PublishDetailScreen } from './publish/PublishDetailScreen';
 export { default as PublishScreen } from './publish/PublishScreen';
+export { default as UpdatePublishScreen } from './publish/UpdatePublishScreen';
 export { default as FilterScreen } from './search/FilterScreen';
 export { default as SearchMapScreen } from './search/SearchMapScreen';
 export { default as SearchScreen } from './search/SearchScreen';
