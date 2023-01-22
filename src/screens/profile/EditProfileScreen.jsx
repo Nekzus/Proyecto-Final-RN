@@ -26,10 +26,9 @@ const EditProfileScreen = ({ navigation }) => {
   const [tempUri, setTempUri] = useState();
   const [tempName, setTempName] = useState();
 
-  const { name, onChange } = useFormValidator({
+  const { name, onChange, setFormValue } = useFormValidator({
     name: '',
   });
-
   const {
     user: { nombre, img, uid },
   } = useSelector((state) => state.auth);
@@ -45,6 +44,10 @@ const EditProfileScreen = ({ navigation }) => {
         tabBarStyle: { display: 'flex' },
       });
     };
+  }, []);
+
+  useEffect(() => {
+    setFormValue({ name: nombre });
   }, []);
 
   const changeAvatar = async () => {
@@ -153,8 +156,8 @@ const EditProfileScreen = ({ navigation }) => {
             <Input
               label="Nombre"
               iconName="account-outline"
-              placeholder={nombre}
-              placeholderTextColor={colors.text}
+              placeholder="Nombre"
+              placeholderTextColor="rgba(255,255,255,0.4)"
               onChangeText={(value) => onChange(value, 'name')}
               value={name}
               onSubmitEditing={onEditProfile}

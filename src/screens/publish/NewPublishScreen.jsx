@@ -1,34 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  getPublicationById,
+  postPublication,
+  putPublication,
+} from '../../store/slices/publish/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert } from 'react-native';
 import { ErrorAlert } from '../../components';
 import { Image } from 'react-native';
 import Input from '../../components/Input';
-import { postPublication } from '../../store/slices/publish/thunks';
+import { LoadingScreen } from '../auth/LoadingScreen';
+import { ROUTES } from '../../constants';
 import { useFormValidator } from '../../hooks/useFormValidator';
 import { useTheme } from '@react-navigation/native';
 
 const NewPublishScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const { categories } = useSelector((state) => state.publish);
-  const { errorMessage } = useSelector((state) => state.errors);
+  const { categories, publication } = useSelector((state) => state.publish);
+  const { errorMessage, loading } = useSelector((state) => state.errors);
   const [tempUri, setTempUri] = useState();
-  const { id = '', title, type } = route.params;
+  const { id = '', type } = route.params;
   const { colors } = useTheme();
+
+  console.log({ id, type, publication });
 
   const typeTemp = categories.find((category) => category.nombre === type.toUpperCase());
 
-  const typeId = typeTemp ? typeTemp._id : '';
+  const typeIde = typeTemp ? typeTemp._id : '';
 
   const validateExcluded = {
     _id,
     image,
-    typeAnimals,
+    typeAnimal,
     race,
     sex,
-    appearance,
     identification,
     date,
     zone,
@@ -38,36 +45,36 @@ const NewPublishScreen = ({ navigation, route }) => {
 
   const {
     _id,
-    appearance,
     date,
     description,
     errors,
     identification,
     image,
-    label,
+    title,
     phone,
     race,
     reset,
     sex,
-    typeAnimals,
+    typeAnimal,
     zone,
     onChange,
     onReset,
     onValidate,
     setFormValue,
+    form,
   } = useFormValidator({
     _id: id,
-    appearance: '',
     date: '',
     description: '',
-    identification: '',
+    identification: false,
     image: '',
-    label: '',
+    title: '',
     phone: '',
     race: '',
     sex: '',
-    typeAnimals: '',
-    zone: '',
+    typeAnimal: '',
+    zone: { lat: 0, lng: 0 },
+    typeId: typeIde,
   });
 
   useEffect(() => {
@@ -83,22 +90,56 @@ const NewPublishScreen = ({ navigation, route }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   loadPublication();
-  // }, []);
+  useEffect(() => {
+    loadPublication();
+  }, [id, publication]);
 
-  // const loadPublication = async () => {
-  //   if (id.length === 0) return;
-  //   const product = await loadProductById(id);
-  //   setFormValue({
-  //     _id: id,
-  //     type: product.categoria._id,
-  //     image: product.img || '',
-  //     nombre,
-  //   });
-  // };
+  const loadPublication = async () => {
+    if (id.length === 0 || publication === null) return;
+    await setFormValue({
+      _id: publication._id,
+      date: publication.date,
+      description: publication.description,
+      identification: publication.identification,
+      image: publication.img,
+      title: publication.title,
+      phone: publication.phone,
+      race: publication.race,
+      sex: publication.sex,
+      typeAnimal: publication.typeanimal,
+      zone: publication.location,
+      typeId: publication.categoria._id,
+    });
+    console.log({ form });
+  };
 
-  console.log({ categories });
+  const onPublish = async () => {
+    const isValid = onValidate(validateExcluded);
+    console.log({ isValid });
+    if (!isValid) {
+      Alert.alert('Completar campos', 'Completar los campos requeridos.');
+      return;
+    }
+    if (id.length > 0) {
+      dispatch(putPublication(form));
+    } else {
+      dispatch(postPublication(form));
+    }
+    Alert.alert(
+      `${id ? 'Actualización' : 'Publicación'} exitosa`,
+      'Tu publicación ha sido cargada con éxito.',
+      [
+        {
+          text: 'ok',
+          onPress: () => {
+            // navigation.navigate(ROUTES.PROFILE, { screen: ROUTES.MY_PUBLISH }); // TODO: revisar problema retorno navegacion
+            navigation.goBack(); // TODO: revisar problema retorno navegacion
+          },
+        },
+      ]
+    );
+    await reset();
+  };
 
   const [images, setImage] = useState([]);
 
@@ -121,43 +162,7 @@ const NewPublishScreen = ({ navigation, route }) => {
   //   }
   // };
 
-  const onPublish = () => {
-    const isValid = onValidate(validateExcluded);
-
-    if (!isValid) {
-      Alert.alert('Completar campos', 'Completar los campos requeridos.');
-      return;
-    }
-
-    dispatch(postPublication({ label, typeId, phone }));
-
-    console.log({
-      label,
-      typeAnimals,
-      race,
-      type,
-      sex,
-      appearance,
-      identification,
-      date,
-      zone,
-      description,
-      phone,
-    });
-
-    // Aquí iría la lógica para enviar la información al servidor.
-    // Puedes utilizar una librería como axios para hacer las peticiones HTTP.
-
-    Alert.alert('Publicación exitosa', 'Tu publicación ha sido cargada con éxito.', [
-      {
-        text: 'ok',
-        onPress: () => {
-          navigation.goBack();
-        },
-      },
-    ]);
-    reset();
-  };
+  if (loading) return <LoadingScreen />;
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
@@ -178,26 +183,26 @@ const NewPublishScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.subContainer}>
           <Input
-            error={errors.label}
+            error={errors.title}
             label="Título:"
-            onChangeText={(value) => onChange(value, 'label')}
-            onFocus={() => onReset('label')}
+            onChangeText={(value) => onChange(value, 'title')}
+            onFocus={() => onReset('title')}
             placeholder="Ingresa un título para tu publicación"
             onSubmitEditing={onPublish}
             placeholderTextColor="rgba(255,255,255,0.4)"
-            value={label}
+            value={title}
           />
         </View>
         <View style={styles.subContainer}>
           <Input
-            error={errors.typeAnimals}
+            error={errors.typeAnimal}
             label="Tipo de animal:"
-            onChangeText={(value) => onChange(value, 'typeAnimals')}
-            onFocus={() => onReset('typeAnimals')}
+            onChangeText={(value) => onChange(value, 'typeAnimal')}
+            onFocus={() => onReset('typeAnimal')}
             placeholder="Ingresa el tipo de animal"
             onSubmitEditing={onPublish}
             placeholderTextColor="rgba(255,255,255,0.4)"
-            value={typeAnimals}
+            value={typeAnimal}
           />
         </View>
         <View style={styles.subContainer}>
@@ -222,18 +227,6 @@ const NewPublishScreen = ({ navigation, route }) => {
             onSubmitEditing={onPublish}
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={sex}
-          />
-        </View>
-        <View style={styles.subContainer}>
-          <Input
-            error={errors.appearance}
-            label="Apariencia:"
-            onChangeText={(value) => onChange(value, 'appearance')}
-            onFocus={() => onReset('appearance')}
-            placeholder="Ingresa una descripción de la apariencia del animal"
-            onSubmitEditing={onPublish}
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            value={appearance}
           />
         </View>
         <View style={styles.subContainer}>
@@ -299,7 +292,7 @@ const NewPublishScreen = ({ navigation, route }) => {
           />
         </View>
         <TouchableOpacity style={styles.publicarBtn} onPress={onPublish}>
-          <Text style={styles.publicarBtnText}>Publicar</Text>
+          <Text style={styles.publicarBtnText}>{id ? 'Actualizar' : 'Publicar'}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

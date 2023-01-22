@@ -1,4 +1,4 @@
-import { MyPublishScreen, NewPublishScreen, PublishScreen } from '../../screens';
+import { NewPublishScreen, PublishScreen } from '../../screens';
 
 import { ROUTES } from '../../constants';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -18,9 +18,6 @@ const PublishNavigator = () => {
         headerStyle: {
           backgroundColor: colors.card,
         },
-        // headerTitleStyle: {
-        //   fontFamily: fonts.title,
-        // },
         headerTitleAlign: 'center',
       }}>
       <Stack.Screen
@@ -32,14 +29,9 @@ const PublishNavigator = () => {
         name={ROUTES.NEW_PUBLISH}
         component={NewPublishScreen}
         options={({ route }) => ({
-          title: `${ROUTES.NEW_PUBLISH} ${route.params.title}`,
+          title: `${route.params.title}`,
           headerShown: true,
         })}
-      />
-      <Stack.Screen
-        name={ROUTES.MY_PUBLISH}
-        component={MyPublishScreen}
-        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

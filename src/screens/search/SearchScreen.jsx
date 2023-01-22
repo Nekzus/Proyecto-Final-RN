@@ -8,6 +8,7 @@ import { ErrorAlert } from '../../components';
 import { FlatList } from 'react-native';
 import { LoadingScreen } from '../auth/LoadingScreen';
 import { ROUTES } from '../../constants';
+import { RefreshControl } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
 const SearchScreen = ({ navigation }) => {
@@ -17,8 +18,12 @@ const SearchScreen = ({ navigation }) => {
   const { colors } = useTheme();
 
   useEffect(() => {
-    dispatch(getPublications());
+    loadPublications();
   }, []);
+
+  const loadPublications = () => {
+    dispatch(getPublications());
+  };
 
   const renderItem = ({ item }) => {
     const onHandlePress = () => {
@@ -27,10 +32,21 @@ const SearchScreen = ({ navigation }) => {
     };
     return (
       <TouchableOpacity activeOpacity={0.8} onPress={onHandlePress}>
-        <Card containerStyle={{ backgroundColor: colors.card, padding: 10, margin: 10 }}>
-          <Card.Image source={require('../../../assets/icon.png')} />
+        <Card
+          containerStyle={{
+            backgroundColor: colors.card,
+            padding: 10,
+            margin: 10,
+            width: 150, // TODO: responsive
+            height: 260, // TODO: responsive
+            borderRadius: 10,
+          }}>
+          <Card.Image
+            resizeMode="cover"
+            source={item.img ? { uri: item.img } : require('../../../assets/icon.png')}
+          />
           <Card.Divider />
-          <Card.Title style={{ color: colors.text }}>{item.nombre}</Card.Title>
+          <Card.Title style={{ color: colors.text }}>{item.title}</Card.Title>
           <Card.Divider />
           <Text style={{ color: colors.text }}>{item.categoria.nombre}</Text>
         </Card>
@@ -41,23 +57,23 @@ const SearchScreen = ({ navigation }) => {
   if (loading) return <LoadingScreen />;
 
   return (
-    <View style={styles.container}>
+    <>
       <ErrorAlert msg="Error" />
-      {publications.length === 0 ? (
-        <Text style={{ color: colors.text }}>No hay publicaciones</Text>
-      ) : (
-        <FlatList data={publications} renderItem={renderItem} keyExtractor={(item, key) => key} />
-      )}
-    </View>
+      <FlatList
+        contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}
+        data={publications}
+        renderItem={renderItem}
+        keyExtractor={(publication) => publication._id}
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={loadPublications} />}
+        ListEmptyComponent={<Text style={{ color: colors.text }}>No hay publicaciones</Text>}
+        numColumns={2}
+      />
+    </>
   );
 };
 
 export default SearchScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  //TODO: styles
 });

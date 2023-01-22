@@ -1,8 +1,8 @@
+import { CATEGORY, ROUTES } from '../../constants';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Card } from '@rneui/themed';
-import { ROUTES } from '../../constants';
 import { useTheme } from '@react-navigation/native';
 
 const PublishScreen = ({ navigation }) => {
@@ -16,7 +16,7 @@ const PublishScreen = ({ navigation }) => {
     <View style={styles.container}>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => handlePublish({ title: 'Mascota Perdida', type: 'lost' })}>
+        onPress={() => handlePublish({ title: 'Crear publicación', type: CATEGORY.LOST })}>
         <Card
           containerStyle={{
             backgroundColor: colors.primary,
@@ -36,7 +36,7 @@ const PublishScreen = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => handlePublish({ title: 'Mascota Encontrada', type: 'found' })}>
+        onPress={() => handlePublish({ title: 'Crear publicación', type: CATEGORY.FOUND })}>
         <Card
           containerStyle={{
             backgroundColor: colors.primary,
@@ -56,7 +56,7 @@ const PublishScreen = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => handlePublish({ title: 'Mascota en Adopción', type: 'adoption' })}>
+        onPress={() => handlePublish({ title: 'Crear publicación', type: CATEGORY.ADOPTION })}>
         <Card
           containerStyle={{
             backgroundColor: colors.primary,

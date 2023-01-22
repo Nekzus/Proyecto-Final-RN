@@ -5,6 +5,7 @@ export const publishSlice = createSlice({
   initialState: {
     categories: null,
     publications: [],
+    myPublications: [],
     publication: null,
   },
   reducers: {
@@ -14,13 +15,8 @@ export const publishSlice = createSlice({
     loadPublicationById: (state, { payload }) => {
       state.publication = payload;
     },
-    updatePublication: (state, { payload }) => {
-      state.publications = state.publications.map((publication) => {
-        if (publication._id === payload._id) {
-          return payload;
-        }
-        return publication;
-      });
+    loadMyPublications: (state, { payload }) => {
+      state.myPublications = payload;
     },
     setCategories: (state, { payload }) => {
       state.categories = payload;
@@ -28,5 +24,5 @@ export const publishSlice = createSlice({
   },
 });
 
-export const { loadPublications, loadPublicationById, setCategories, updatePublication } =
+export const { loadPublications, loadMyPublications, loadPublicationById, setCategories } =
   publishSlice.actions;
