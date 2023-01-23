@@ -17,14 +17,7 @@ const PublishScreen = ({ navigation }) => {
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => handlePublish({ title: 'Crear publicación', type: CATEGORY.LOST })}>
-        <Card
-          containerStyle={{
-            backgroundColor: colors.primary,
-            borderRadius: 15,
-            marginVertical: 20,
-            height: 125, //TODO: fix height to be dynamic
-            width: 320, //TODO: fix width to be dynamic
-          }}>
+        <Card containerStyle={{ ...styles.card, backgroundColor: colors.primary }}>
           <Card.Title style={{ ...styles.textButton, color: colors.text }}>
             Mascota Perdida
           </Card.Title>
@@ -37,14 +30,7 @@ const PublishScreen = ({ navigation }) => {
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => handlePublish({ title: 'Crear publicación', type: CATEGORY.FOUND })}>
-        <Card
-          containerStyle={{
-            backgroundColor: colors.primary,
-            borderRadius: 15,
-            marginVertical: 20,
-            height: 125, //TODO: fix height to be dynamic
-            width: 320, //TODO: fix width to be dynamic
-          }}>
+        <Card containerStyle={{ ...styles.card, backgroundColor: colors.primary }}>
           <Card.Title style={{ ...styles.textButton, color: colors.text }}>
             Mascota Encontrada
           </Card.Title>
@@ -57,14 +43,7 @@ const PublishScreen = ({ navigation }) => {
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => handlePublish({ title: 'Crear publicación', type: CATEGORY.ADOPTION })}>
-        <Card
-          containerStyle={{
-            backgroundColor: colors.primary,
-            borderRadius: 15,
-            marginVertical: 20,
-            height: 125, //TODO: fix height to be dynamic
-            width: 320, //TODO: fix width to be dynamic
-          }}>
+        <Card containerStyle={{ ...styles.card, backgroundColor: colors.primary }}>
           <Card.Title style={{ ...styles.textButton, color: colors.text }}>
             Mascota en Adopción
           </Card.Title>
@@ -90,6 +69,20 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     fontSize: 15,
+  },
+  card: {
+    borderRadius: 15,
+    marginVertical: 20,
+    height: 125, //TODO: fix height to be dynamic
+    width: 320,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
   },
 });
 

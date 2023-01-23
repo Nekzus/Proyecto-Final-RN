@@ -14,8 +14,10 @@ import { loadingState, updateProfile } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Avatar } from '@rneui/themed';
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import Input from '../../components/Input';
 import { LoadingScreen } from '../auth/LoadingScreen';
+import { clearLogEntriesAsync } from 'expo-updates';
 import { uploadImage } from '../../helpers/uploadImage';
 import { useFormValidator } from '../../hooks';
 import { useTheme } from '@react-navigation/native';
@@ -95,7 +97,7 @@ const EditProfileScreen = ({ navigation }) => {
 
   const onEditProfile = async () => {
     Keyboard.dismiss();
-    if (!tempUri && !name) {
+    if (!tempUri && name === nombre) {
       Alert.alert('Perfil sin cambios', 'No hay cambios para actualizar');
       return;
     }
@@ -168,14 +170,20 @@ const EditProfileScreen = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.body}>
-          <View style={{ ...styles.button, backgroundColor: colors.primary }}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Text style={{ color: colors.text, fontSize: 18 }}>Cancelar</Text>
+          <View style={styles.btnContainer}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={{ ...styles.profileBtn, backgroundColor: colors.primary }}
+              onPress={() => navigation.goBack()}>
+              <Icon name="keyboard-return" size={24} color={colors.text} />
+              <Text style={{ ...styles.profileBtnText, color: colors.text }}>Volver</Text>
             </TouchableOpacity>
-          </View>
-          <View style={{ ...styles.button, backgroundColor: colors.primary }}>
-            <TouchableOpacity onPress={onEditProfile}>
-              <Text style={{ color: colors.text, fontSize: 18 }}>Actualizar</Text>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={{ ...styles.profileBtn, backgroundColor: colors.notification }}
+              onPress={onEditProfile}>
+              <Icon name="publish" size={24} color={colors.text} />
+              <Text style={{ ...styles.profileBtnText, color: colors.text }}>Actualizar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -189,6 +197,10 @@ export default EditProfileScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   userContainer: {
     alignItems: 'center',
@@ -218,5 +230,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  profileBtn: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 5,
+    width: '45%',
+    padding: 10,
+    alignItems: 'center',
+    marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
+  },
+  profileBtnText: {
+    marginLeft: 10,
+    fontWeight: 'bold', //TODO: Revisar con carga de fuente
   },
 });

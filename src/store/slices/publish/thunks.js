@@ -52,11 +52,15 @@ export const getCategories = () => {
 };
 
 export const deletePublication = (id) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
+      const {
+        user: { uid },
+      } = getState().auth;
       dispatch(loadingState(true));
       await petQuestApi.delete(`/productos/${id}`);
       dispatch(getPublications());
+      dispatch(getMyPublications(uid));
       dispatch(loadingState(false));
     } catch (error) {
       if (!error.response) return;

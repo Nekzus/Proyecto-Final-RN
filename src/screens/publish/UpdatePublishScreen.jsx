@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { deletePublication, putPublication } from '../../store/slices/publish/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert } from 'react-native';
 import { ErrorAlert } from '../../components';
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { Image } from 'react-native';
 import Input from '../../components/Input';
 import { LoadingScreen } from '../auth/LoadingScreen';
-import { ROUTES } from '../../constants';
-import { putPublication } from '../../store/slices/publish/thunks';
 import { useFormValidator } from '../../hooks/useFormValidator';
 import { useTheme } from '@react-navigation/native';
 
@@ -19,8 +19,6 @@ const UpdatePublishScreen = ({ navigation, route }) => {
   const [tempUri, setTempUri] = useState();
   const { id = '', type } = route.params;
   const { colors } = useTheme();
-
-  console.log({ id, type, publication });
 
   const typeTemp = categories.find((category) => category.nombre === type.toUpperCase());
 
@@ -106,7 +104,6 @@ const UpdatePublishScreen = ({ navigation, route }) => {
       zone: publication.location,
       typeId: publication.categoria._id,
     });
-    console.log({ form });
   };
 
   const onUpdate = () => {
@@ -121,8 +118,24 @@ const UpdatePublishScreen = ({ navigation, route }) => {
       {
         text: 'ok',
         onPress: () => {
-          // navigation.navigate(ROUTES.PROFILE, { screen: ROUTES.MY_PUBLISH }); // TODO: revisar problema retorno navegacion
-          navigation.navigate(ROUTES.MY_PUBLISH); // TODO: revisar problema retorno navegacion
+          navigation.goBack();
+        },
+      },
+    ]);
+    reset();
+  };
+
+  const onDelete = () => {
+    Alert.alert('Eliminar publicación', '¿Estás seguro de eliminar esta publicación?', [
+      {
+        text: 'Cancelar',
+        style: 'cancel',
+      },
+      {
+        text: 'Eliminar',
+        onPress: () => {
+          dispatch(deletePublication(_id));
+          navigation.goBack();
         },
       },
     ]);
@@ -279,9 +292,22 @@ const UpdatePublishScreen = ({ navigation, route }) => {
             value={phone}
           />
         </View>
-        <TouchableOpacity style={styles.updateBtn} onPress={onUpdate}>
-          <Text style={styles.updateBtnText}>Actualizar</Text>
-        </TouchableOpacity>
+        <View style={styles.btnContainer}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={{ ...styles.updateBtn, backgroundColor: colors.primary }}
+            onPress={onDelete}>
+            <Icon name="trash-can-outline" size={24} color={colors.text} />
+            <Text style={{ ...styles.updateBtnText, color: colors.text }}>Borrar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={{ ...styles.updateBtn, backgroundColor: colors.notification }}
+            onPress={onUpdate}>
+            <Icon name="update" size={24} color={colors.text} />
+            <Text style={{ ...styles.updateBtnText, color: colors.text }}>Actualizar</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
@@ -293,6 +319,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   subContainer: {
     marginBottom: 20,
@@ -320,13 +350,24 @@ const styles = StyleSheet.create({
     color: '#ccc',
   },
   updateBtn: {
-    backgroundColor: '#0099ff',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 5,
+    width: '45%',
     padding: 10,
     alignItems: 'center',
     marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
   },
   updateBtnText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    marginLeft: 10,
+    fontWeight: 'bold', //TODO: Revisar con carga de fuente
   },
 });

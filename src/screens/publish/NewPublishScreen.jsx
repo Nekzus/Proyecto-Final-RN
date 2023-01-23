@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert } from 'react-native';
 import { ErrorAlert } from '../../components';
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { Image } from 'react-native';
 import Input from '../../components/Input';
 import { LoadingScreen } from '../auth/LoadingScreen';
@@ -92,8 +93,7 @@ const NewPublishScreen = ({ navigation, route }) => {
       {
         text: 'ok',
         onPress: () => {
-          // navigation.navigate(ROUTES.PROFILE, { screen: ROUTES.MY_PUBLISH }); // TODO: revisar problema retorno navegacion
-          navigation.goBack(); // TODO: revisar problema retorno navegacion
+          navigation.goBack();
         },
       },
     ]);
@@ -250,9 +250,22 @@ const NewPublishScreen = ({ navigation, route }) => {
             value={phone}
           />
         </View>
-        <TouchableOpacity style={styles.publishBtn} onPress={onPublish}>
-          <Text style={styles.publishBtnText}>Publicar</Text>
-        </TouchableOpacity>
+        <View style={styles.btnContainer}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={{ ...styles.publishBtn, backgroundColor: colors.primary }}
+            onPress={() => navigation.goBack()}>
+            <Icon name="keyboard-return" size={24} color={colors.text} />
+            <Text style={{ ...styles.publishBtnText, color: colors.text }}>Volver</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={{ ...styles.publishBtn, backgroundColor: colors.notification }}
+            onPress={onPublish}>
+            <Icon name="publish" size={24} color={colors.text} />
+            <Text style={{ ...styles.publishBtnText, color: colors.text }}>Publicar</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
@@ -264,6 +277,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   subContainer: {
     marginBottom: 20,
@@ -291,13 +308,24 @@ const styles = StyleSheet.create({
     color: '#ccc',
   },
   publishBtn: {
-    backgroundColor: '#0099ff',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 5,
+    width: '45%',
     padding: 10,
     alignItems: 'center',
     marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
   },
   publishBtnText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    marginLeft: 10,
+    fontWeight: 'bold', //TODO: Revisar con carga de fuente
   },
 });

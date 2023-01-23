@@ -33,7 +33,7 @@ const MyPublishScreen = ({ navigation }) => {
 
   useEffect(() => {
     loadPublications();
-  }, []);
+  }, [routes]);
 
   const loadPublications = () => {
     dispatch(getMyPublications(user.uid));
@@ -51,15 +51,7 @@ const MyPublishScreen = ({ navigation }) => {
 
     return (
       <TouchableOpacity activeOpacity={0.8} onPress={onHandlePress}>
-        <Card
-          containerStyle={{
-            backgroundColor: colors.card,
-            padding: 10,
-            margin: 10,
-            width: 150, // TODO: responsive
-            height: 260, // TODO: responsive
-            borderRadius: 10,
-          }}>
+        <Card containerStyle={{ ...styles.card, backgroundColor: colors.card }}>
           <Card.Image
             resizeMode="cover"
             source={item.img ? { uri: item.img } : require('../../../assets/icon.png')}
@@ -94,5 +86,19 @@ const MyPublishScreen = ({ navigation }) => {
 export default MyPublishScreen;
 
 const styles = StyleSheet.create({
-  //TODO: styles
+  card: {
+    padding: 10,
+    margin: 10,
+    width: 150, // TODO: responsive
+    height: 260, // TODO: responsive
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
+  },
 });

@@ -35,10 +35,9 @@ const PublishDetailScreen = ({ navigation, route }) => {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => {
-            dispatch(deletePublication(publication._id));
             navigation.goBack();
           }}>
-          <Text style={{ color: colors.text }}>Borrar</Text>
+          <Text style={{ color: colors.text }}>Volver</Text>
         </TouchableOpacity>
       </View>
     </View>
