@@ -1,6 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 
-import { ErrorAlert, Loading } from '../../components';
+import { CATEGORIES, IDENTIFICATION, SEX, TYPE_ANIMAL } from '../../constants';
+import { ErrorAlert, Input, Loading, Picker, PickerInput } from '../../components';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { clearNewId, loadingState } from '../../store';
@@ -9,7 +10,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Alert } from 'react-native';
 import { Avatar } from '@rneui/themed';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
-import Input from '../../components/Input';
 import { postPublication } from '../../store/slices/publish/thunks';
 import { uploadImage } from '../../helpers/uploadImage';
 import { useFormValidator } from '../../hooks/useFormValidator';
@@ -51,6 +51,7 @@ const NewPublishScreen = ({ navigation, route }) => {
     reset,
     sex,
     typeAnimal,
+    typeId,
     zone,
     onChange,
     onReset,
@@ -59,13 +60,13 @@ const NewPublishScreen = ({ navigation, route }) => {
   } = useFormValidator({
     date: '',
     description: '',
-    identification: false,
+    identification: true,
     image: '',
     title: '',
     phone: '',
     race: '',
-    sex: '',
-    typeAnimal: '',
+    sex: 'macho',
+    typeAnimal: 'perro',
     zone: { lat: 0, lng: 0 },
     typeId: typeIde,
   });
@@ -198,15 +199,23 @@ const NewPublishScreen = ({ navigation, route }) => {
           />
         </View>
         <View style={styles.subContainer}>
-          <Input
+          <PickerInput
+            error={errors.typeId}
+            label="Tipo publicación:"
+            selectedValue={typeId}
+            onFocus={() => onReset('typeId')}
+            onValueChange={(value) => onChange(value, 'typeId')}
+            array={CATEGORIES}
+          />
+        </View>
+        <View style={styles.subContainer}>
+          <PickerInput
             error={errors.typeAnimal}
             label="Tipo de animal:"
-            onChangeText={(value) => onChange(value, 'typeAnimal')}
+            selectedValue={typeAnimal}
             onFocus={() => onReset('typeAnimal')}
-            placeholder="Ingresa el tipo de animal"
-            onSubmitEditing={onPublish}
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            value={typeAnimal}
+            onValueChange={(value) => onChange(value, 'typeAnimal')}
+            array={TYPE_ANIMAL}
           />
         </View>
         <View style={styles.subContainer}>
@@ -222,27 +231,23 @@ const NewPublishScreen = ({ navigation, route }) => {
           />
         </View>
         <View style={styles.subContainer}>
-          <Input
+          <PickerInput
             error={errors.sex}
             label="Sexo:"
-            onChangeText={(value) => onChange(value, 'sex')}
+            selectedValue={sex}
             onFocus={() => onReset('sex')}
-            placeholder="Ingresa el sexo del animal"
-            onSubmitEditing={onPublish}
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            value={sex}
+            onValueChange={(value) => onChange(value, 'sex')}
+            array={SEX}
           />
         </View>
         <View style={styles.subContainer}>
-          <Input
+          <PickerInput
             error={errors.identification}
             label="Identificación:"
-            onChangeText={(value) => onChange(value, 'identification')}
+            selectedValue={identification}
             onFocus={() => onReset('identification')}
-            placeholder="Ingresa algún tipo de identificación del animal"
-            onSubmitEditing={onPublish}
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            value={identification}
+            onValueChange={(value) => onChange(value, 'identification')}
+            array={IDENTIFICATION}
           />
         </View>
         <View style={styles.subContainer}>

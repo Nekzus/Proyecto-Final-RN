@@ -1,13 +1,12 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { COLORS } from '../constants';
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
+import { Picker } from '@react-native-picker/picker';
 import React from 'react';
 import { useTheme } from '@react-navigation/native';
 
-const Input = ({ label, iconName, error, password, onFocus = () => {}, ...props }) => {
+const PickerInput = ({ label, error, array, onFocus = () => {}, ...props }) => {
   const { colors, fonts } = useTheme();
-  const [hidePassword, setHidePassword] = React.useState(password);
   const [isFocused, setIsFocused] = React.useState(false);
   return (
     <View style={{ marginBottom: 20 }}>
@@ -20,25 +19,18 @@ const Input = ({ label, iconName, error, password, onFocus = () => {}, ...props 
             alignItems: 'center',
           },
         ]}>
-        <Icon name={iconName} style={{ color: colors.text, fontSize: 22, marginRight: 10 }} />
-        <TextInput
-          autoCorrect={false}
+        <Picker
+          style={{ color: colors.text, fontFamily: fonts.title, flex: 1 }}
+          {...props}
           onFocus={() => {
             onFocus();
             setIsFocused(true);
           }}
-          onBlur={() => setIsFocused(false)}
-          secureTextEntry={hidePassword}
-          style={{ color: colors.text, fontFamily: fonts.title, flex: 1 }}
-          {...props}
-        />
-        {password && (
-          <Icon
-            onPress={() => setHidePassword(!hidePassword)}
-            name={hidePassword ? 'eye-outline' : 'eye-off-outline'}
-            style={{ color: colors.text, fontSize: 22 }}
-          />
-        )}
+          onBlur={() => setIsFocused(false)}>
+          {array.map((c) => (
+            <Picker.Item color="black" label={c.name} value={c.id} key={c.id} />
+          ))}
+        </Picker>
       </View>
       {error && (
         <Text style={{ fontFamily: fonts.title, marginTop: 7, color: COLORS.red, fontSize: 13 }}>
@@ -49,7 +41,7 @@ const Input = ({ label, iconName, error, password, onFocus = () => {}, ...props 
   );
 };
 
-export default Input;
+export default PickerInput;
 
 const styles = StyleSheet.create({
   label: {

@@ -1,6 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 
-import { ErrorAlert, Loading } from '../../components';
+import { CATEGORIES, IDENTIFICATION, SEX, TYPE_ANIMAL } from '../../constants';
+import { ErrorAlert, Loading, PickerInput } from '../../components';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { deletePublication, putPublication } from '../../store/slices/publish/thunks';
@@ -29,15 +30,10 @@ const UpdatePublishScreen = ({ navigation, route }) => {
 
   const validateExcluded = {
     _id,
-    image,
-    typeAnimal,
     race,
-    sex,
-    identification,
     date,
     zone,
     description,
-    phone,
   };
 
   const {
@@ -53,6 +49,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
     reset,
     sex,
     typeAnimal,
+    typeId,
     zone,
     onChange,
     onReset,
@@ -63,13 +60,13 @@ const UpdatePublishScreen = ({ navigation, route }) => {
     _id: id,
     date: '',
     description: '',
-    identification: false,
+    identification: true,
     image: '',
     title: '',
     phone: '',
     race: '',
-    sex: '',
-    typeAnimal: '',
+    sex: 'macho',
+    typeAnimal: 'perro',
     zone: { lat: 0, lng: 0 },
     typeId: typeIde,
   });
@@ -236,15 +233,23 @@ const UpdatePublishScreen = ({ navigation, route }) => {
           />
         </View>
         <View style={styles.subContainer}>
-          <Input
+          <PickerInput
+            error={errors.typeId}
+            label="Tipo publicación:"
+            selectedValue={typeId}
+            onFocus={() => onReset('typeId')}
+            onValueChange={(value) => onChange(value, 'typeId')}
+            array={CATEGORIES}
+          />
+        </View>
+        <View style={styles.subContainer}>
+          <PickerInput
             error={errors.typeAnimal}
             label="Tipo de animal:"
-            onChangeText={(value) => onChange(value, 'typeAnimal')}
+            selectedValue={typeAnimal}
             onFocus={() => onReset('typeAnimal')}
-            placeholder="Ingresa el tipo de animal"
-            onSubmitEditing={onUpdate}
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            value={typeAnimal}
+            onValueChange={(value) => onChange(value, 'typeAnimal')}
+            array={TYPE_ANIMAL}
           />
         </View>
         <View style={styles.subContainer}>
@@ -260,27 +265,23 @@ const UpdatePublishScreen = ({ navigation, route }) => {
           />
         </View>
         <View style={styles.subContainer}>
-          <Input
+          <PickerInput
             error={errors.sex}
             label="Sexo:"
-            onChangeText={(value) => onChange(value, 'sex')}
+            selectedValue={sex}
             onFocus={() => onReset('sex')}
-            placeholder="Ingresa el sexo del animal"
-            onSubmitEditing={onUpdate}
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            value={sex}
+            onValueChange={(value) => onChange(value, 'sex')}
+            array={SEX}
           />
         </View>
         <View style={styles.subContainer}>
-          <Input
+          <PickerInput
             error={errors.identification}
             label="Identificación:"
-            onChangeText={(value) => onChange(value, 'identification')}
+            selectedValue={identification}
             onFocus={() => onReset('identification')}
-            placeholder="Ingresa algún tipo de identificación del animal"
-            onSubmitEditing={onUpdate}
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            value={identification}
+            onValueChange={(value) => onChange(value, 'identification')}
+            array={IDENTIFICATION}
           />
         </View>
         <View style={styles.subContainer}>
