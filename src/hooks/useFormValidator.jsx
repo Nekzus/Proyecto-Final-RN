@@ -90,7 +90,9 @@ export const useFormValidator = (initialState) => {
   };
 
   const setFormValue = (form) => {
-    setState(form);
+    setState((prevState) => {
+      return { ...prevState, ...form };
+    });
   };
 
   return {

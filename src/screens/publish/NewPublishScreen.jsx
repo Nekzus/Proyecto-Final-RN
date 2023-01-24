@@ -87,6 +87,10 @@ const NewPublishScreen = ({ navigation, route }) => {
   });
 
   useEffect(() => {
+    chargeImage();
+  }, [newId]);
+
+  useEffect(() => {
     setFormValue({
       date: dateTime.toLocaleString(),
     });
@@ -103,17 +107,12 @@ const NewPublishScreen = ({ navigation, route }) => {
     };
   }, []);
 
-  useEffect(() => {
-    chargeImage();
-  }, [newId]);
-
   const chargeImage = async () => {
     try {
       if (!newId) return;
       dispatch(loadingState(true));
       await uploadImage('productos', tempUri, newId);
       dispatch(clearNewId());
-
       dispatch(loadingState(false));
     } catch (error) {
       Alert.alert('Error al subir imagen', error.message);
