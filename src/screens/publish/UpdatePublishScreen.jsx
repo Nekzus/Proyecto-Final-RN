@@ -1,14 +1,23 @@
 import * as ImagePicker from 'expo-image-picker';
 
+import {
+  Button,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { CATEGORIES, IDENTIFICATION, SEX, TYPE_ANIMAL } from '../../constants';
 import { ErrorAlert, Loading, PickerInput } from '../../components';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { deletePublication, putPublication } from '../../store/slices/publish/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert } from 'react-native';
 import { Avatar } from '@rneui/themed';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import Input from '../../components/Input';
 import { loadingState } from '../../store';
@@ -23,6 +32,18 @@ const UpdatePublishScreen = ({ navigation, route }) => {
   const [tempUri, setTempUri] = useState(null);
   const { id = '', type } = route.params;
   const { colors, fonts } = useTheme();
+  const newDate = new Date();
+  const [dateTime, setDateTime] = useState(newDate);
+  const [showPicker, setShowPicker] = useState(false);
+
+  const onShowPicker = () => {
+    setShowPicker(true);
+  };
+
+  const onHandleChange = (event, selectedDate) => {
+    setDateTime(selectedDate);
+    setShowPicker(false);
+  };
 
   const typeTemp = categories.find((category) => category.nombre === type.toUpperCase());
 
@@ -30,10 +51,15 @@ const UpdatePublishScreen = ({ navigation, route }) => {
 
   const validateExcluded = {
     _id,
+    image,
+    typeAnimal,
     race,
+    sex,
+    identification,
     date,
     zone,
     description,
+    phone,
   };
 
   const {
@@ -84,14 +110,14 @@ const UpdatePublishScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     loadPublication();
-  }, [id, publication]);
+  }, [id, publication, dateTime]);
 
   const loadPublication = async () => {
     if (id.length === 0 || publication === null) return;
     await setFormValue({
       _id: publication._id,
-      date: publication.date,
       description: publication.description,
+      date: dateTime.toLocaleString(),
       identification: publication.identification,
       image: publication.img,
       title: publication.title,
@@ -295,6 +321,30 @@ const UpdatePublishScreen = ({ navigation, route }) => {
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={date}
           />
+          <View style={styles.inputContainer}>
+            {Platform.OS === 'android' ? (
+              <>
+                <Button title="Elegir fecha" onPress={onShowPicker} color={colors.primary} />
+                {showPicker && (
+                  <DateTimePicker
+                    value={dateTime}
+                    mode="date"
+                    is24Hour={true}
+                    onChange={onHandleChange}
+                    style={{ width: '80%' }}
+                  />
+                )}
+              </>
+            ) : (
+              <DateTimePicker
+                value={dateTime}
+                mode="date"
+                is24Hour={true}
+                onChange={(event, selectedDate) => setDate(selectedDate)}
+                style={{ width: '80%' }}
+              />
+            )}
+          </View>
         </View>
         <View style={styles.subContainer}>
           <Input

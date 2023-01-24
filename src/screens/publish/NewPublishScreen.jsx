@@ -2,13 +2,15 @@ import * as ImagePicker from 'expo-image-picker';
 
 import { CATEGORIES, IDENTIFICATION, SEX, TYPE_ANIMAL } from '../../constants';
 import { ErrorAlert, Input, Loading, Picker, PickerInput } from '../../components';
+import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { clearNewId, loadingState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert } from 'react-native';
 import { Avatar } from '@rneui/themed';
+import { Button } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { postPublication } from '../../store/slices/publish/thunks';
 import { uploadImage } from '../../helpers/uploadImage';
@@ -19,9 +21,21 @@ const NewPublishScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { categories, newId } = useSelector((state) => state.publish);
   const { loading } = useSelector((state) => state.errors);
-  const [tempUri, setTempUri] = useState(null);
   const { type } = route.params;
   const { colors, fonts } = useTheme();
+  const [tempUri, setTempUri] = useState(null);
+  const newDate = new Date();
+  const [dateTime, setDateTime] = useState(newDate);
+  const [showPicker, setShowPicker] = useState(false);
+
+  const onShowPicker = () => {
+    setShowPicker(true);
+  };
+
+  const onHandleChange = (event, selectedDate) => {
+    setDateTime(selectedDate);
+    setShowPicker(false);
+  };
 
   const typeTemp = categories.find((category) => category.nombre === type.toUpperCase());
 
@@ -56,6 +70,7 @@ const NewPublishScreen = ({ navigation, route }) => {
     onChange,
     onReset,
     onValidate,
+    setFormValue,
     form,
   } = useFormValidator({
     date: '',
@@ -70,6 +85,12 @@ const NewPublishScreen = ({ navigation, route }) => {
     zone: { lat: 0, lng: 0 },
     typeId: typeIde,
   });
+
+  useEffect(() => {
+    setFormValue({
+      date: dateTime.toLocaleString(),
+    });
+  }, [dateTime]);
 
   useEffect(() => {
     navigation.getParent().setOptions({
@@ -261,6 +282,30 @@ const NewPublishScreen = ({ navigation, route }) => {
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={date}
           />
+          <View style={styles.inputContainer}>
+            {Platform.OS === 'android' ? (
+              <>
+                <Button title="Elegir fecha" onPress={onShowPicker} color={colors.primary} />
+                {showPicker && (
+                  <DateTimePicker
+                    value={dateTime}
+                    mode="date"
+                    is24Hour={true}
+                    onChange={onHandleChange}
+                    style={{ width: '80%' }}
+                  />
+                )}
+              </>
+            ) : (
+              <DateTimePicker
+                value={dateTime}
+                mode="date"
+                is24Hour={true}
+                onChange={(event, selectedDate) => setDate(selectedDate)}
+                style={{ width: '80%' }}
+              />
+            )}
+          </View>
         </View>
         <View style={styles.subContainer}>
           <Input

@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-const baseURL = 'https://nodejs-backend-rn.up.railway.app/api'; //'http://192.168.50.122:8080/api';localhost
+const baseURL = 'http://192.168.50.122:8080/api'; // 'https://nodejs-backend-rn.up.railway.app/api';
 
 const petQuestApi = axios.create({ baseURL });
 
