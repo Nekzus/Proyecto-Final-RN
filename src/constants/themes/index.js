@@ -9,7 +9,7 @@ export const primaryTheme = {
     notification: '#014F86',
   },
   fonts: {
-    title: 'Qatar-Heavy',
-    content: 'Qatar-Bold',
+    title: 'Lato-Bold',
+    content: 'Lato-Light',
   },
 };

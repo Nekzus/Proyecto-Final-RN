@@ -1,28 +1,20 @@
 import { COLORS, ROUTES } from '../../constants';
-import React, { useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { askPermissionCamera, askPermissionLocation, logout, persistor } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Avatar } from '@rneui/themed';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
+import React from 'react';
+import { logout } from '../../store';
 import { useTheme } from '@react-navigation/native';
 
 const ProfileScreen = ({ navigation }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const dispatch = useDispatch();
 
   const {
     user: { nombre, email, img },
   } = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    dispatch(askPermissionLocation());
-  }, []);
-
-  useEffect(() => {
-    dispatch(askPermissionCamera());
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -36,8 +28,10 @@ const ProfileScreen = ({ navigation }) => {
             source={img ? { uri: img } : null}></Avatar>
         </View>
         <View style={styles.dataContainer}>
-          <Text style={{ color: colors.text, fontSize: 22, fontWeight: 'bold' }}>{nombre}</Text>
-          <Text style={{ color: colors.text, fontSize: 17 }}>{email}</Text>
+          <Text style={{ color: colors.text, fontSize: 22, fontFamily: fonts.title }}>
+            {nombre}
+          </Text>
+          <Text style={{ color: colors.text, fontSize: 17, fontFamily: fonts.title }}>{email}</Text>
         </View>
         <View style={styles.iconContainer}>
           <TouchableOpacity
@@ -55,7 +49,9 @@ const ProfileScreen = ({ navigation }) => {
           }}
           style={styles.option}>
           <Icon name="map" size={24} color={colors.text} />
-          <Text style={{ ...styles.optionText, color: colors.text }}>Mi ubicación</Text>
+          <Text style={{ ...styles.optionText, color: colors.text, fontFamily: fonts.title }}>
+            Mi ubicación
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
@@ -64,7 +60,9 @@ const ProfileScreen = ({ navigation }) => {
           }}
           style={styles.option}>
           <Icon name="note-multiple" size={24} color={colors.text} />
-          <Text style={{ ...styles.optionText, color: colors.text }}>Mis publicaciones</Text>
+          <Text style={{ ...styles.optionText, color: colors.text, fontFamily: fonts.title }}>
+            Mis publicaciones
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
@@ -73,14 +71,18 @@ const ProfileScreen = ({ navigation }) => {
           }}
           style={styles.option}>
           <Icon name="cog" size={24} color={colors.text} />
-          <Text style={{ ...styles.optionText, color: colors.text }}>Configuración</Text>
+          <Text style={{ ...styles.optionText, color: colors.text, fontFamily: fonts.title }}>
+            Configuración
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => dispatch(logout())}
           style={styles.option}>
           <Icon name="exit-run" size={24} color={colors.text} />
-          <Text style={{ ...styles.optionText, color: colors.text }}>Cerrar sesión</Text>
+          <Text style={{ ...styles.optionText, color: colors.text, fontFamily: fonts.title }}>
+            Cerrar sesión
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -25,9 +25,9 @@ const ProfileNavigator = () => {
         headerStyle: {
           backgroundColor: colors.card,
         },
-        // headerTitleStyle: {
-        //   fontFamily: fonts.title,
-        // },
+        headerTitleStyle: {
+          fontFamily: fonts.title,
+        },
         headerTitleAlign: 'center',
       }}>
       <Stack.Screen

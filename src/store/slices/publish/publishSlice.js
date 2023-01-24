@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const publishSlice = createSlice({
   name: 'publish',
   initialState: {
+    newId: null,
     categories: null,
     publications: [],
     myPublications: [],
@@ -21,8 +22,20 @@ export const publishSlice = createSlice({
     setCategories: (state, { payload }) => {
       state.categories = payload;
     },
+    setNewId: (state, { payload }) => {
+      state.newId = payload;
+    },
+    clearNewId: (state) => {
+      state.newId = null;
+    },
   },
 });
 
-export const { loadPublications, loadMyPublications, loadPublicationById, setCategories } =
-  publishSlice.actions;
+export const {
+  clearNewId,
+  loadPublications,
+  loadMyPublications,
+  loadPublicationById,
+  setCategories,
+  setNewId,
+} = publishSlice.actions;

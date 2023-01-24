@@ -1,14 +1,17 @@
+import * as ImagePicker from 'expo-image-picker';
+
+import { ErrorAlert, Loading } from '../../components';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { deletePublication, putPublication } from '../../store/slices/publish/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert } from 'react-native';
-import { ErrorAlert } from '../../components';
+import { Avatar } from '@rneui/themed';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
-import { Image } from 'react-native';
 import Input from '../../components/Input';
-import { LoadingScreen } from '../auth/LoadingScreen';
+import { loadingState } from '../../store';
+import { uploadImage } from '../../helpers/uploadImage';
 import { useFormValidator } from '../../hooks/useFormValidator';
 import { useTheme } from '@react-navigation/native';
 
@@ -16,9 +19,9 @@ const UpdatePublishScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { categories, publication } = useSelector((state) => state.publish);
   const { loading } = useSelector((state) => state.errors);
-  const [tempUri, setTempUri] = useState();
+  const [tempUri, setTempUri] = useState(null);
   const { id = '', type } = route.params;
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   const typeTemp = categories.find((category) => category.nombre === type.toUpperCase());
 
@@ -74,12 +77,10 @@ const UpdatePublishScreen = ({ navigation, route }) => {
   useEffect(() => {
     navigation.getParent().setOptions({
       tabBarStyle: { display: 'none' },
-      headerShown: false,
     });
     return () => {
       navigation.getParent().setOptions({
         tabBarStyle: { display: 'flex' },
-        headerShown: true,
       });
     };
   }, []);
@@ -106,13 +107,23 @@ const UpdatePublishScreen = ({ navigation, route }) => {
     });
   };
 
-  const onUpdate = () => {
+  const onUpdate = async () => {
     const isValid = onValidate(validateExcluded);
     if (!isValid) {
       Alert.alert('Completar campos', 'Completar los campos requeridos.');
       return;
     }
     dispatch(putPublication(form));
+    if (tempUri) {
+      try {
+        dispatch(loadingState(true));
+        await uploadImage('productos', tempUri, publication._id);
+        dispatch(loadingState(false));
+      } catch (error) {
+        Alert.alert('Error al subir imagen', error.message);
+        console.log(error);
+      }
+    }
 
     Alert.alert(' Actualización exitosa', 'Tu publicación ha sido cargada con éxito.', [
       {
@@ -142,43 +153,73 @@ const UpdatePublishScreen = ({ navigation, route }) => {
     reset();
   };
 
-  const [images, setImage] = useState([]);
+  const selectImage = async () => {
+    Alert.alert('Cargar imagen de mascota', 'Seleccionar origen', [
+      {
+        text: 'Cancelar',
+        style: 'cancel',
+      },
+      {
+        text: 'Galería',
+        onPress: () => pickImage(),
+      },
+      {
+        text: 'Cámara',
+        onPress: () => takePhoto(),
+      },
+    ]);
+  };
 
-  // const seleccionarFotos = async () => {
-  //   const fotosPermitidas = await ImagePicker.requestCameraRollPermissionsAsync();
-  //   if (fotosPermitidas.granted) {
-  //     const fotosSeleccionadas = await ImagePicker.launchImageLibraryAsync({
-  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //       allowsMultipleSelection: true,
-  //       quality: 0.5,
-  //     });
-  //     if (!fotosSeleccionadas.cancelled) {
-  //       setFotos([...fotos, ...fotosSeleccionadas.uri]);
-  //     }
-  //   } else {
-  //     Alert.alert(
-  //       'Permiso denegado',
-  //       'Es necesario permitir el acceso a la librería de imágenes para seleccionar fotos.'
-  //     );
-  //   }
-  // };
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 0.5,
+    });
 
-  if (loading) return <LoadingScreen />;
+    if (!result.canceled) {
+      setTempUri(result.assets);
+    }
+  };
+
+  const takePhoto = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setTempUri(result.assets);
+    }
+  };
+
+  if (loading) return <Loading />;
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
       <ErrorAlert msg="Publicación fallida" />
       <View style={styles.container}>
         <View style={styles.subContainer}>
-          <Text style={{ color: colors.text, marginVertical: 5 }}>Añadir fotos:</Text>
+          <Text style={{ color: colors.text, fontFamily: fonts.title, marginVertical: 5 }}>
+            Actualizar foto:
+          </Text>
           <View style={styles.imageContainer}>
-            {images.map((image, index) => (
-              <Image key={index} source={{ uri: image }} style={styles.image} />
-            ))}
-            <TouchableOpacity onPress={() => {}}>
-              <View style={styles.addImageBtn}>
-                <Text style={styles.addImageBtnText}>+</Text>
-              </View>
+            <TouchableOpacity onPress={selectImage}>
+              <Avatar
+                size={100}
+                containerStyle={styles.avatar}
+                icon={{ name: 'add', type: 'material' }}
+                source={
+                  tempUri !== null
+                    ? { uri: tempUri[0].uri }
+                    : publication.img
+                    ? { uri: publication.img }
+                    : null
+                }
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -298,14 +339,18 @@ const UpdatePublishScreen = ({ navigation, route }) => {
             style={{ ...styles.updateBtn, backgroundColor: colors.primary }}
             onPress={onDelete}>
             <Icon name="trash-can-outline" size={24} color={colors.text} />
-            <Text style={{ ...styles.updateBtnText, color: colors.text }}>Borrar</Text>
+            <Text style={{ ...styles.updateBtnText, fontFamily: fonts.title, color: colors.text }}>
+              Borrar
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
             style={{ ...styles.updateBtn, backgroundColor: colors.notification }}
             onPress={onUpdate}>
             <Icon name="update" size={24} color={colors.text} />
-            <Text style={{ ...styles.updateBtnText, color: colors.text }}>Actualizar</Text>
+            <Text style={{ ...styles.updateBtnText, fontFamily: fonts.title, color: colors.text }}>
+              Actualizar
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -368,6 +413,9 @@ const styles = StyleSheet.create({
   },
   updateBtnText: {
     marginLeft: 10,
-    fontWeight: 'bold', //TODO: Revisar con carga de fuente
+  },
+  avatar: {
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
 });

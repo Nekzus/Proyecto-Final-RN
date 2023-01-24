@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { fonts, useTheme } from '@react-navigation/native';
 
 import React from 'react';
-import { useTheme } from '@react-navigation/native';
 
 const FilterScreen = () => {
   const { colors } = useTheme();
   return (
     <View style={styles.container}>
-      <Text style={{ color: colors.text }}>Filter Screen</Text>
+      <Text style={{ color: colors.text, fontFamily: fonts.title }}>Filter Screen</Text>
     </View>
   );
 };

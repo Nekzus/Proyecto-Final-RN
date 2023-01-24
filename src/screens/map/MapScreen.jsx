@@ -4,10 +4,10 @@ import React from 'react';
 import { useTheme } from '@react-navigation/native';
 
 const MapScreen = () => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   return (
     <View style={styles.container}>
-      <Text style={{ color: colors.text }}>Map Screen</Text>
+      <Text style={{ color: colors.text, fontFamily: fonts.title }}>Map Screen</Text>
     </View>
   );
 };

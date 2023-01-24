@@ -1,24 +1,41 @@
+import { askPermissionCamera, askPermissionLocation, getCategories } from '../store';
+
 import { Ionicons as Icon } from '@expo/vector-icons';
 import ProfileNavigator from './profile/ProfileNavigator';
 import PublishNavigator from './publish/PublishNavigator';
 import { ROUTES } from '../constants';
 import SearchNavigator from './search/SearchNavigator';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import { useTheme } from '@react-navigation/native';
 
 const BottomTab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const { colors, fonts } = useTheme();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, []);
+
+  useEffect(() => {
+    dispatch(askPermissionLocation());
+  }, []);
+
+  useEffect(() => {
+    dispatch(askPermissionCamera());
+  }, []);
 
   return (
     <BottomTab.Navigator
       screenOptions={{
-        // headerShown: false,
+        headerShown: false,
         tabBarLabelStyle: {
           height: 22,
           padding: 1,
-          //   fontFamily: fonts.content,
+          fontFamily: fonts.title,
           fontSize: 12,
         },
         headerTitleAlign: 'center',
@@ -54,7 +71,6 @@ const TabNavigator = () => {
         name={ROUTES.PROFILE}
         component={ProfileNavigator}
         options={{
-          headerShown: false,
           title: `${ROUTES.PROFILE}`,
           tabBarIcon: ({ focused }) => (
             <Icon name={focused ? 'person' : 'person-outline'} size={22} color={colors.text} />

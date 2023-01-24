@@ -19,7 +19,7 @@ import { useFormValidator } from '../../hooks';
 import { useTheme } from '@react-navigation/native';
 
 const LoginScreen = ({ navigation }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const dispatch = useDispatch();
   const { email, password, onChange, errors, onValidate, onReset } = useFormValidator({
     email: '',
@@ -42,7 +42,9 @@ const LoginScreen = ({ navigation }) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={AuthStyles.formContainer}>
           <Logo />
-          <Text style={AuthStyles.title}>Login</Text>
+          <Text style={{ ...AuthStyles.title, fontFamily: fonts.title, textAlign: 'center' }}>
+            Ingresar
+          </Text>
           <Input
             label="Email"
             iconName="email-outline"
@@ -75,7 +77,7 @@ const LoginScreen = ({ navigation }) => {
           />
           <View style={AuthStyles.buttonContainer}>
             <TouchableOpacity activeOpacity={0.8} style={AuthStyles.button} onPress={onLogin}>
-              <Text style={AuthStyles.buttonText}>Login</Text>
+              <Text style={{ ...AuthStyles.buttonText, fontFamily: fonts.title }}>Login</Text>
             </TouchableOpacity>
           </View>
 
@@ -83,7 +85,9 @@ const LoginScreen = ({ navigation }) => {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => navigation.replace(ROUTES.REGISTER)}>
-              <Text style={AuthStyles.buttonText}>Nueva cuenta</Text>
+              <Text style={{ ...AuthStyles.buttonText, fontFamily: fonts.title }}>
+                Nueva cuenta
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

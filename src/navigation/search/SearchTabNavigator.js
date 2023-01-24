@@ -16,7 +16,7 @@ const SearchTabNavigator = () => {
         tabBarLabelStyle: {
           height: 22,
           padding: 1,
-          //   fontFamily: fonts.content,
+          fontFamily: fonts.title,
           fontSize: 12,
         },
         headerTitleAlign: 'center',

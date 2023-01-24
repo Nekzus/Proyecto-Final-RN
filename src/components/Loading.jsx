@@ -3,7 +3,7 @@ import { ActivityIndicator, View } from 'react-native';
 import React from 'react';
 import { useTheme } from '@react-navigation/native';
 
-export const LoadingScreen = () => {
+const Loading = () => {
   const { colors } = useTheme();
   return (
     <View
@@ -13,7 +13,9 @@ export const LoadingScreen = () => {
         alignItems: 'center',
         backgroundColor: colors.background,
       }}>
-      <ActivityIndicator size="large" color={colors.primary} />
+      <ActivityIndicator size="large" color={colors.text} />
     </View>
   );
 };
+
+export default Loading;

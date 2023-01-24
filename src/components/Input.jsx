@@ -6,12 +6,12 @@ import React from 'react';
 import { useTheme } from '@react-navigation/native';
 
 const Input = ({ label, iconName, error, password, onFocus = () => {}, ...props }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const [hidePassword, setHidePassword] = React.useState(password);
   const [isFocused, setIsFocused] = React.useState(false);
   return (
     <View style={{ marginBottom: 20 }}>
-      <Text style={{ ...style.label, color: colors.text }}>{label}</Text>
+      <Text style={{ ...style.label, color: colors.text, fontFamily: fonts.title }}>{label}</Text>
       <View
         style={[
           style.inputContainer,
@@ -29,7 +29,7 @@ const Input = ({ label, iconName, error, password, onFocus = () => {}, ...props 
           }}
           onBlur={() => setIsFocused(false)}
           secureTextEntry={hidePassword}
-          style={{ color: colors.text, flex: 1 }}
+          style={{ color: colors.text, fontFamily: fonts.title, flex: 1 }}
           {...props}
         />
         {password && (
@@ -40,7 +40,11 @@ const Input = ({ label, iconName, error, password, onFocus = () => {}, ...props 
           />
         )}
       </View>
-      {error && <Text style={{ marginTop: 7, color: COLORS.red, fontSize: 12 }}>{error}</Text>}
+      {error && (
+        <Text style={{ fontFamily: fonts.title, marginTop: 7, color: COLORS.red, fontSize: 13 }}>
+          {error}
+        </Text>
+      )}
     </View>
   );
 };

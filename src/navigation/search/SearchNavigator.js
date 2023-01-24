@@ -1,10 +1,4 @@
-import {
-  DetailScreen,
-  FilterScreen,
-  PublishDetailScreen,
-  SearchMapScreen,
-  SearchScreen,
-} from '../../screens';
+import { FilterScreen, PublishDetailScreen, SearchScreen } from '../../screens';
 
 import { ROUTES } from '../../constants';
 import SearchTabNavigator from './SearchTabNavigator';
@@ -25,24 +19,19 @@ const SearchNavigator = () => {
         headerStyle: {
           backgroundColor: colors.card,
         },
-        // headerTitleStyle: {
-        //   fontFamily: fonts.title,
-        // },
+        headerTitleStyle: {
+          fontFamily: fonts.title,
+        },
         headerTitleAlign: 'center',
       }}>
       {/* <Stack.Screen
         name={ROUTES.SEARCH_LIST}
         component={SearchScreen}
-        options={{ headerShown: false }}
+        options={{ headerShown: false }} //TODO: revisar
       /> */}
       <Stack.Screen
         name={ROUTES.SEARCH_TAB}
         component={SearchTabNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name={ROUTES.DETAIL}
-        component={DetailScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -53,7 +42,10 @@ const SearchNavigator = () => {
       <Stack.Screen
         name={ROUTES.PUBLISH_DETAIL}
         component={PublishDetailScreen}
-        options={{ headerShown: true }}
+        options={({ route }) => ({
+          title: `${route.params.title}`,
+          headerShown: true,
+        })}
       />
     </Stack.Navigator>
   );

@@ -1,5 +1,4 @@
 export default {
-  DETAIL: 'Detail',
   EDIT_PROFILE: 'Editar perfil',
   FILTER: 'Filter',
   LOGIN: 'Login',
@@ -9,7 +8,7 @@ export default {
   NEW_PUBLISH: 'Nueva Publicacion',
   PROFILE_LIST: 'Profile List',
   PROFILE: 'Perfil',
-  PUBLISH_DETAIL: 'Publish Detail',
+  PUBLISH_DETAIL: 'Detalle de publicación',
   PUBLISH_LIST: 'Publish List',
   PUBLISH: 'Publicar',
   REGISTER: 'Register',

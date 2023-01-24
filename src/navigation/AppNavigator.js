@@ -1,13 +1,25 @@
-import { checkToken, getCategories } from '../store';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AuthNavigator from './AuthNavigator';
-import { LoadingScreen } from '../screens';
+import { Loading } from '../components';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'react-native';
 import TabNavigator from './TabNavigator';
-import { useEffect } from 'react';
+import { checkToken } from '../store';
 import { useTheme } from '@react-navigation/native';
+
+SplashScreen.preventAutoHideAsync();
+
+const fetchFonts = async () => {
+  await Font.loadAsync({
+    'Lato-Light': require('../../assets/fonts/Lato-Light.ttf'),
+    'Lato-Bold': require('../../assets/fonts/Lato-Bold.ttf'),
+  });
+};
 
 const AppNavigator = () => {
   const { colors } = useTheme();
@@ -15,16 +27,28 @@ const AppNavigator = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(checkToken());
+    const prepare = async () => {
+      try {
+        await fetchFonts();
+        await new Promise((resolve) => setTimeout(resolve, 4000));
+      } catch (error) {
+        console.warn(error);
+      }
+    };
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    await SplashScreen.hideAsync();
   }, []);
 
   useEffect(() => {
-    dispatch(getCategories());
+    dispatch(checkToken());
   }, []);
 
-  if (status === 'checking') return <LoadingScreen />;
+  if (status === 'checking') return <Loading />;
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider onLayout={onLayoutRootView}>
       <StatusBar backgroundColor={colors.card} />
       {status !== 'authenticated' ? <AuthNavigator /> : <TabNavigator />}
     </SafeAreaProvider>

@@ -26,7 +26,6 @@ export const askPermissionLocation = () => {
           },
         ]);
       }
-      console.log('askPermissionLocation', status);
     } catch (error) {
       console.log(error);
     }
@@ -38,7 +37,6 @@ export const checkPermissionLocation = () => {
     try {
       const { status } = await Location.getForegroundPermissionsAsync();
       dispatch(ckPermissionLocation(status));
-      console.log('checkPermissionLocation', status);
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +58,6 @@ export const askPermissionCamera = () => {
           },
         ]);
       }
-      console.log('askPermissionCamera', status);
     } catch (error) {
       console.log(error);
     }
@@ -72,7 +69,6 @@ export const checkPermissionCamera = () => {
     try {
       const { status } = await Camera.getCameraPermissionsAsync();
       dispatch(ckPermissionCamera(status));
-      console.log('checkPermissionCamera', status);
     } catch (error) {
       console.log(error);
     }

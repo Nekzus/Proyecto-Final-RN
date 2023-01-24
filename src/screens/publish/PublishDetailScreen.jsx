@@ -1,46 +1,80 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ErrorAlert } from '../../components';
-import { LoadingScreen } from '../auth/LoadingScreen';
-import { deletePublication } from '../../store';
+import { Image } from 'react-native';
+import { Loading } from '../../components';
 import { useTheme } from '@react-navigation/native';
 
 const PublishDetailScreen = ({ navigation, route }) => {
-  const { colors } = useTheme();
-  const dispatch = useDispatch();
+  const { colors, fonts } = useTheme();
   const { publication } = useSelector((state) => state.publish);
   const { loading } = useSelector((state) => state.errors);
+
   useEffect(() => {
     navigation.getParent().setOptions({
       tabBarStyle: { display: 'none' },
-      headerShown: false,
     });
     return () => {
       navigation.getParent().setOptions({
         tabBarStyle: { display: 'flex' },
-        headerShown: true,
       });
     };
   }, []);
 
-  if (loading) return <LoadingScreen />;
+  if (loading) return <Loading />;
 
   return (
-    <View style={styles.container}>
-      <ErrorAlert msg="Error" />
-      <Text style={{ color: colors.text }}>{JSON.stringify(publication) || 'Publish Detail'}</Text>
-      <View style={{ backgroundColor: colors.card, padding: 10, borderRadius: 10 }}>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <Text style={{ color: colors.text }}>Volver</Text>
-        </TouchableOpacity>
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+      <View style={styles.container}>
+        <Image
+          source={publication.img ? { uri: publication.img } : require('../../../assets/icon.png')}
+          style={styles.image}
+        />
+        <View style={{ ...styles.infoContainer, backgroundColor: colors.notification }}>
+          <View style={styles.titleContainer}>
+            <Text style={{ ...styles.title, color: colors.text, fontFamily: fonts.title }}>
+              {publication.title}
+            </Text>
+          </View>
+          <Text style={{ ...styles.category, color: colors.text, fontFamily: fonts.title }}>
+            {publication.categoria.nombre}
+          </Text>
+          <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
+            {publication.description}
+          </Text>
+          <Text style={{ ...styles.subtitle, color: colors.text, fontFamily: fonts.title }}>
+            DETALLES
+          </Text>
+          <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
+            {`Tipo: ${publication.typeanimal}`}
+          </Text>
+          <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
+            {`Raza: ${publication.race}`}
+          </Text>
+          <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
+            {`Sexo: ${publication.sex}`}
+          </Text>
+          <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
+            {`Collar: ${publication.identification ? 'Si' : 'No'}`}
+          </Text>
+          <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
+            {`Tel. Contacto: ${publication.phone}`}
+          </Text>
+          <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
+            {`Fecha: ${publication.date === null ? 'No especificada' : publication.date}`}
+          </Text>
+          <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
+            {`lat[${publication.location.lat}] : lng[${publication.location.lng}]`}
+          </Text>
+          <View style={styles.publicateBy}>
+            <Text style={{ ...styles.publicateName, color: colors.text, fontFamily: fonts.title }}>
+              {`Publicado por: ${publication.user.nombre}`}
+            </Text>
+          </View>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -50,6 +84,56 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    padding: 16,
+  },
+  image: {
+    width: '100%',
+    height: 300,
+    resizeMode: 'cover',
+    borderRadius: 10,
+    marginBottom: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
+  },
+  infoContainer: {
+    alignItems: 'flex-start',
+    width: '100%',
+    padding: 10,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
+  },
+  titleContainer: {
+    alignItems: 'center',
+    width: '100%',
+    padding: 10,
+  },
+  title: {
+    fontSize: 30,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 8,
+  },
+  fields: {
+    fontSize: 15,
+    marginVertical: 8,
+  },
+  publicateBy: {
+    marginVertical: 10,
+    alignSelf: 'center',
   },
 });

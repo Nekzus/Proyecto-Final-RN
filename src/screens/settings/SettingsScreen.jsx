@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
 const SettingsScreen = ({ navigation }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   useEffect(() => {
     navigation.getParent().setOptions({
@@ -19,7 +19,7 @@ const SettingsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={{ color: colors.text }}>Settings Screen</Text>
+      <Text style={{ color: colors.text, fontFamily: fonts.title }}>Settings Screen</Text>
     </View>
   );
 };

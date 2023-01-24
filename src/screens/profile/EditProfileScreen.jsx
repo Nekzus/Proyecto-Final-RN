@@ -16,14 +16,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Avatar } from '@rneui/themed';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import Input from '../../components/Input';
-import { LoadingScreen } from '../auth/LoadingScreen';
-import { clearLogEntriesAsync } from 'expo-updates';
+import { Loading } from '../../components';
 import { uploadImage } from '../../helpers/uploadImage';
 import { useFormValidator } from '../../hooks';
 import { useTheme } from '@react-navigation/native';
 
 const EditProfileScreen = ({ navigation }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const dispatch = useDispatch();
   const [tempUri, setTempUri] = useState();
   const [tempName, setTempName] = useState();
@@ -138,7 +137,7 @@ const EditProfileScreen = ({ navigation }) => {
     }
   };
 
-  if (loading) return <LoadingScreen />;
+  if (loading) return <Loading />;
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
@@ -176,14 +175,20 @@ const EditProfileScreen = ({ navigation }) => {
               style={{ ...styles.profileBtn, backgroundColor: colors.primary }}
               onPress={() => navigation.goBack()}>
               <Icon name="keyboard-return" size={24} color={colors.text} />
-              <Text style={{ ...styles.profileBtnText, color: colors.text }}>Volver</Text>
+              <Text
+                style={{ ...styles.profileBtnText, color: colors.text, fontFamily: fonts.title }}>
+                Volver
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.8}
               style={{ ...styles.profileBtn, backgroundColor: colors.notification }}
               onPress={onEditProfile}>
               <Icon name="publish" size={24} color={colors.text} />
-              <Text style={{ ...styles.profileBtnText, color: colors.text }}>Actualizar</Text>
+              <Text
+                style={{ ...styles.profileBtnText, color: colors.text, fontFamily: fonts.title }}>
+                Actualizar
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -250,6 +255,5 @@ const styles = StyleSheet.create({
   },
   profileBtnText: {
     marginLeft: 10,
-    fontWeight: 'bold', //TODO: Revisar con carga de fuente
   },
 });

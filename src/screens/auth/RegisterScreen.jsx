@@ -20,7 +20,7 @@ import { useFormValidator } from '../../hooks';
 import { useTheme } from '@react-navigation/native';
 
 const RegisterScreen = ({ navigation }) => {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const dispatch = useDispatch();
   const { email, password, name, onChange, errors, onValidate, onReset } = useFormValidator({
     name: '',
@@ -43,7 +43,9 @@ const RegisterScreen = ({ navigation }) => {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={AuthStyles.formContainer}>
           <Logo />
-          <Text style={AuthStyles.title}>Registro</Text>
+          <Text style={{ ...AuthStyles.title, fontFamily: fonts.title, textAlign: 'center' }}>
+            Registro
+          </Text>
           <Input
             label="Nombre"
             iconName="account-outline"
@@ -91,7 +93,9 @@ const RegisterScreen = ({ navigation }) => {
           />
           <View style={AuthStyles.buttonContainer}>
             <TouchableOpacity activeOpacity={0.8} style={AuthStyles.button} onPress={onRegister}>
-              <Text style={AuthStyles.buttonText}>Crear cuenta</Text>
+              <Text style={{ ...AuthStyles.buttonText, fontFamily: fonts.title }}>
+                Crear cuenta
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -99,7 +103,7 @@ const RegisterScreen = ({ navigation }) => {
             activeOpacity={0.8}
             onPress={() => navigation.replace(ROUTES.LOGIN)}
             style={AuthStyles.buttonReturn}>
-            <Text style={AuthStyles.buttonText}>Login</Text>
+            <Text style={{ ...AuthStyles.buttonText, fontFamily: fonts.title }}>Login</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

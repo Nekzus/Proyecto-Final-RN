@@ -4,6 +4,7 @@ import {
   loadPublicationById,
   loadPublications,
   setCategories,
+  setNewId,
 } from './publishSlice';
 
 import petQuestApi from '../../../api/petQuestApi';
@@ -12,8 +13,8 @@ export const postPublication = (data) => {
   return async (dispatch) => {
     try {
       dispatch(loadingState(true));
-      await petQuestApi.post('/productos', {
-        title: data.title, // TODO: Revisar en el backend restriccion duplicacion de nombre
+      const resp = await petQuestApi.post('/productos', {
+        title: data.title,
         categoria: data.typeId,
         img: data.image,
         typeanimal: data.typeAnimal,
@@ -25,6 +26,7 @@ export const postPublication = (data) => {
         phone: data.phone,
         date: data.date,
       });
+      dispatch(setNewId(resp.data._id));
       dispatch(getPublications());
       dispatch(loadingState(false));
     } catch (error) {
@@ -94,7 +96,7 @@ export const putPublication = (data) => {
         user: { uid },
       } = getState().auth;
       await petQuestApi.put(`/productos/${data._id}`, {
-        title: data.title, // TODO: Revisar en el backend restriccion duplicacion de nombre
+        title: data.title,
         categoria: data.typeId,
         img: data.image,
         typeanimal: data.typeAnimal,

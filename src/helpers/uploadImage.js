@@ -7,7 +7,6 @@ export const uploadImage = async (collection = 'productos', data, id) => {
       type: 'image/*',
       name: data[0].fileName || 'Image',
     };
-
     const formData = new FormData();
     formData.append('archivo', fileToUpload);
 
