@@ -130,6 +130,8 @@ const UpdatePublishScreen = ({ navigation, route }) => {
     });
   };
 
+  console.log({ form });
+
   const onUpdate = async () => {
     const isValid = onValidate(validateExcluded);
     if (!isValid) {
@@ -374,7 +376,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
         <View style={styles.subContainer}>
           <Input
             error={errors.phone}
-            keyboardType="numeric"
+            keyboardType="phone-pad"
             label="Teléfono de contacto:"
             onChangeText={(value) => onChange(value, 'phone')}
             onFocus={() => onReset('phone')}

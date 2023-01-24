@@ -1,7 +1,7 @@
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AuthNavigator from './AuthNavigator';
@@ -24,6 +24,7 @@ const fetchFonts = async () => {
 const AppNavigator = () => {
   const { colors } = useTheme();
   const { status } = useSelector((state) => state.auth);
+  const [appIsReady, setAppIsReady] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,18 +34,26 @@ const AppNavigator = () => {
         await new Promise((resolve) => setTimeout(resolve, 4000));
       } catch (error) {
         console.warn(error);
+      } finally {
+        setAppIsReady(true);
       }
     };
     prepare();
   }, []);
 
-  const onLayoutRootView = useCallback(async () => {
-    await SplashScreen.hideAsync();
-  }, []);
-
   useEffect(() => {
     dispatch(checkToken());
   }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
 
   if (status === 'checking') return <Loading />;
   return (

@@ -334,7 +334,7 @@ const NewPublishScreen = ({ navigation, route }) => {
         <View style={styles.subContainer}>
           <Input
             error={errors.phone}
-            keyboardType="numeric"
+            keyboardType="phone-pad"
             label="Teléfono de contacto:"
             onChangeText={(value) => onChange(value, 'phone')}
             onFocus={() => onReset('phone')}

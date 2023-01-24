@@ -8,7 +8,6 @@ const Stack = createNativeStackNavigator();
 
 const AuthNavigator = () => {
   const { colors, fonts } = useTheme();
-
   return (
     <Stack.Navigator
       initialRouteName={ROUTES.LOGIN}
@@ -17,6 +16,9 @@ const AuthNavigator = () => {
         headerBackTitle: '',
         headerStyle: {
           backgroundColor: colors.card,
+        },
+        headerTitleStyle: {
+          fontFamily: fonts.title,
         },
         headerTitleAlign: 'center',
       }}>
