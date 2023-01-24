@@ -16,7 +16,7 @@ SplashScreen.preventAutoHideAsync();
 
 const fetchFonts = async () => {
   await Font.loadAsync({
-    'Lato-Light': require('../../assets/fonts/Lato-Light.ttf'),
+    'Montserrat-Light': require('../../assets/fonts/Montserrat-Light.ttf'),
     'Lato-Bold': require('../../assets/fonts/Lato-Bold.ttf'),
   });
 };

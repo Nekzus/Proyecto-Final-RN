@@ -4,7 +4,7 @@ import { CATEGORIES, IDENTIFICATION, SEX, TYPE_ANIMAL } from '../../constants';
 import { ErrorAlert, Input, Loading, Picker, PickerInput } from '../../components';
 import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { clearNewId, loadingState } from '../../store';
+import { askPermissionCamera, clearNewId, loadingState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert } from 'react-native';
@@ -12,6 +12,7 @@ import { Avatar } from '@rneui/themed';
 import { Button } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
+import moment from 'moment';
 import { postPublication } from '../../store/slices/publish/thunks';
 import { uploadImage } from '../../helpers/uploadImage';
 import { useFormValidator } from '../../hooks/useFormValidator';
@@ -143,6 +144,7 @@ const NewPublishScreen = ({ navigation, route }) => {
   };
 
   const selectImage = async () => {
+    dispatch(askPermissionCamera());
     Alert.alert('Cargar imagen de mascota', 'Seleccionar origen', [
       {
         text: 'Cancelar',
@@ -278,8 +280,9 @@ const NewPublishScreen = ({ navigation, route }) => {
             onFocus={() => onReset('date')}
             placeholder="Ingresa la fecha en la que el animal se perdió"
             onSubmitEditing={onPublish}
+            editable={false}
             placeholderTextColor="rgba(255,255,255,0.4)"
-            value={date}
+            value={moment(dateTime).format('DD/MM/YYYY')}
           />
           <View style={styles.inputContainer}>
             {Platform.OS === 'android' ? (

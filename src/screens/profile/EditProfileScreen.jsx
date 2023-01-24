@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { loadingState, updateProfile } from '../../store';
+import { askPermissionCamera, loadingState, updateProfile } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Avatar } from '@rneui/themed';
@@ -52,6 +52,7 @@ const EditProfileScreen = ({ navigation }) => {
   }, []);
 
   const changeAvatar = async () => {
+    dispatch(askPermissionCamera());
     Alert.alert('Cambiar foto de perfil', 'Seleccionar origen', [
       {
         text: 'Cancelar',

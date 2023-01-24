@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 
 import { Image } from 'react-native';
 import { Loading } from '../../components';
+import moment from 'moment';
+import { useSelector } from 'react-redux';
 import { useTheme } from '@react-navigation/native';
 
 const PublishDetailScreen = ({ navigation, route }) => {
@@ -62,7 +63,11 @@ const PublishDetailScreen = ({ navigation, route }) => {
             {`Tel. Contacto: ${publication.phone}`}
           </Text>
           <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
-            {`Fecha: ${publication.date === null ? 'No especificada' : publication.date}`}
+            {`Fecha: ${
+              publication.date === null
+                ? 'No especificada'
+                : moment(publication.date).format('DD/MM/YYYY')
+            }`}
           </Text>
           <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
             {`lat[${publication.location.lat}] : lng[${publication.location.lng}]`}

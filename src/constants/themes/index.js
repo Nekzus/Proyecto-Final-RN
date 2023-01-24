@@ -10,6 +10,6 @@ export const primaryTheme = {
   },
   fonts: {
     title: 'Lato-Bold',
-    content: 'Lato-Light',
+    content: 'Montserrat-Light',
   },
 };
