@@ -1,14 +1,12 @@
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Text, View } from 'react-native';
 
 import Loading from './Loading';
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { useLocation } from '../hooks/useLocation';
-import { useSelector } from 'react-redux';
 
 const MapsViews = ({ marker, selectedLocation }) => {
   const { hasLocation, initialPosition } = useLocation();
-  // const { coords } = useSelector((state) => state.locations);
   const initialRegion = {
     latitude: initialPosition?.lat,
     longitude: initialPosition?.lng,

@@ -1,15 +1,30 @@
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { askPermissionLocation, getPublications } from '../../store';
 
-import React from 'react';
-import { useTheme } from '@react-navigation/native';
+import { MapsMarkers } from '../../components';
+import { useDispatch } from 'react-redux';
 
-const SearchMapScreen = () => {
-  const { colors, fonts } = useTheme();
+const SearchMapScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    navigation.getParent().setOptions({
+      tabBarStyle: { display: 'none' },
+    });
+    return () => {
+      navigation.getParent().setOptions({
+        tabBarStyle: { display: 'flex' },
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    dispatch(askPermissionLocation());
+  }, []);
+
   return (
     <View style={styles.container}>
-      <Text style={{ color: colors.text, fontFamily: fonts.title, fontSize: 18 }}>
-        Search Map Screen
-      </Text>
+      <MapsMarkers />
     </View>
   );
 };
@@ -19,7 +34,9 @@ export default SearchMapScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  mapView: {
+    height: '100%',
+    width: '100%',
   },
 });

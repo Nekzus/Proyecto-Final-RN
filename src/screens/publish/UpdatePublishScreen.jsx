@@ -1,16 +1,8 @@
 import * as ImagePicker from 'expo-image-picker';
 
-import {
-  Button,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
 import { CATEGORIES, IDENTIFICATION, ROUTES, SEX, TYPE_ANIMAL } from '../../constants';
 import { ErrorAlert, Loading, MapBox, PickerInput } from '../../components';
+import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { askPermissionCamera, geoCodingLocation, loadingState } from '../../store';
 import { deletePublication, putPublication } from '../../store/slices/publish/thunks';
@@ -124,8 +116,9 @@ const UpdatePublishScreen = ({ navigation, route }) => {
   useEffect(() => {
     setFormValue({
       _address: address,
+      zone: coords,
     });
-  }, [address]);
+  }, [coords]);
 
   const loadPublication = async () => {
     if (id.length === 0 || publication === null) return;
