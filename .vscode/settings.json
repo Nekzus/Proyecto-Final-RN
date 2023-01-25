@@ -1,0 +1,16 @@
+{
+  "conventionalCommits.scopes": [
+    "Login",
+    "Register",
+    "Profile",
+    "Code",
+    "Publish",
+    "List Publications",
+    "Deploy",
+    "Alerts",
+    "Server",
+    "Location",
+    "Dark mode",
+    "Clear cache git"
+  ]
+}
