@@ -10,7 +10,6 @@ npm-debug.*
 *.orig.*
 web-build/
 
-**/maps/index.js
-
 # macOS
 .DS_Store
+src/constants/maps/index.js
