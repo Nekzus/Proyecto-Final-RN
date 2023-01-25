@@ -31,12 +31,10 @@ export const currentLocation = () => {
             lng: longitude,
           })
         );
-        await dispatch(
-          insertAddress({
-            lat: latitude,
-            lng: longitude,
-          })
-        );
+        await insertAddress({
+          lat: latitude,
+          lng: longitude,
+        });
       } else {
         throw new Error('Location not available');
       }
