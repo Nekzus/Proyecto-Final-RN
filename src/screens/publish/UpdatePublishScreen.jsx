@@ -9,10 +9,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { CATEGORIES, IDENTIFICATION, SEX, TYPE_ANIMAL } from '../../constants';
-import { ErrorAlert, Loading, PickerInput } from '../../components';
+import { CATEGORIES, IDENTIFICATION, ROUTES, SEX, TYPE_ANIMAL } from '../../constants';
+import { ErrorAlert, Loading, MapBox, PickerInput } from '../../components';
 import React, { useEffect, useState } from 'react';
-import { askPermissionCamera, loadingState } from '../../store';
+import { askPermissionCamera, geoCodingLocation, loadingState } from '../../store';
 import { deletePublication, putPublication } from '../../store/slices/publish/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -36,6 +36,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
   const newDate = new Date();
   const [dateTime, setDateTime] = useState(newDate);
   const [showPicker, setShowPicker] = useState(false);
+  const { address, coords } = useSelector((state) => state.locations);
 
   const onShowPicker = () => {
     setShowPicker(true);
@@ -51,6 +52,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
   const typeIde = typeTemp ? typeTemp._id : '';
 
   const validateExcluded = {
+    _address,
     _id,
     image,
     typeAnimal,
@@ -64,6 +66,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
   };
 
   const {
+    _address,
     _id,
     date,
     description,
@@ -84,6 +87,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
     setFormValue,
     form,
   } = useFormValidator({
+    _address: publication.addss,
     _id: id,
     date: '',
     description: '',
@@ -99,6 +103,10 @@ const UpdatePublishScreen = ({ navigation, route }) => {
   });
 
   useEffect(() => {
+    dispatch(geoCodingLocation());
+  }, [coords]);
+
+  useEffect(() => {
     navigation.getParent().setOptions({
       tabBarStyle: { display: 'none' },
     });
@@ -112,6 +120,12 @@ const UpdatePublishScreen = ({ navigation, route }) => {
   useEffect(() => {
     loadPublication();
   }, [id, publication, dateTime]);
+
+  useEffect(() => {
+    setFormValue({
+      _address: address,
+    });
+  }, [address]);
 
   const loadPublication = async () => {
     if (id.length === 0 || publication === null) return;
@@ -327,7 +341,20 @@ const UpdatePublishScreen = ({ navigation, route }) => {
           <View style={styles.inputContainer}>
             {Platform.OS === 'android' ? (
               <>
-                <Button title="Elegir fecha" onPress={onShowPicker} color={colors.primary} />
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={{ ...styles.updateBtn, backgroundColor: colors.primary, width: '100%' }}
+                  onPress={onShowPicker}>
+                  <Icon name="calendar" size={24} color={colors.text} />
+                  <Text
+                    style={{
+                      ...styles.updateBtnText,
+                      color: colors.text,
+                      fontFamily: fonts.title,
+                    }}>
+                    Elegir fecha
+                  </Text>
+                </TouchableOpacity>
                 {showPicker && (
                   <DateTimePicker
                     value={dateTime}
@@ -350,16 +377,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
           </View>
         </View>
         <View style={styles.subContainer}>
-          <Input
-            error={errors.zone}
-            label="¿En qué zona se ha perdido? :"
-            onChangeText={(value) => onChange(value, 'zone')}
-            onFocus={() => onReset('zone')}
-            placeholder="Ingresa la zona en la que el animal se perdió"
-            onSubmitEditing={onUpdate}
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            value={zone}
-          />
+          <MapBox label="Indicar zona:" coords={coords} address={address} route={ROUTES.MAP} />
         </View>
         <View style={styles.subContainer}>
           <Input
@@ -372,6 +390,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
             placeholder="Ingresa una descripción detallada del animal y las circunstancias de su pérdida"
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={description}
+            big
           />
         </View>
         <View style={styles.subContainer}>

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { Map } from '../../components';
 import { ROUTES } from '../../constants';
 import { geoCodingLocation } from '../../store';
@@ -12,8 +13,6 @@ const MyLocationScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const { locationStatus } = useSelector((state) => state.permissions);
   const { address, coords } = useSelector((state) => state.locations);
-
-  console.log({ coords, address });
 
   useEffect(() => {
     navigation.getParent().setOptions({
@@ -50,21 +49,25 @@ const MyLocationScreen = ({ navigation }) => {
           <Text
             style={{
               color: colors.text,
-              fontSize: 20,
+              fontSize: 15,
               fontFamily: fonts.content,
               textAlign: 'center',
             }}>
             {address}
           </Text>
           <TouchableOpacity
-            onPress={() => {
-              navigation.navigate(ROUTES.MAP);
-            }}>
-            <View style={{ ...styles.button, backgroundColor: colors.notification }}>
-              <Text style={{ ...styles.buttonText, color: colors.text, fontFamily: fonts.title }}>
-                Seleccionar ubicación
-              </Text>
-            </View>
+            activeOpacity={0.8}
+            style={{ ...styles.locationBtn, backgroundColor: colors.notification }}
+            onPress={() => navigation.navigate(ROUTES.MAP)}>
+            <Icon name="google-maps" size={24} color={colors.text} />
+            <Text
+              style={{
+                ...styles.locationBtnText,
+                color: colors.text,
+                fontFamily: fonts.title,
+              }}>
+              Elegir ubicación
+            </Text>
           </TouchableOpacity>
         </>
       )}
@@ -92,21 +95,24 @@ const styles = StyleSheet.create({
       height: 9,
     },
   },
-  button: {
-    width: '75%',
-    marginVertical: 20,
+  locationBtn: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 5,
+    width: '45%',
+    padding: 10,
     alignItems: 'center',
-    borderRadius: 10,
+    marginTop: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 9,
+      height: 5,
     },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
   },
-  buttonText: {
-    fontSize: 17,
-    textTransform: 'uppercase',
-    textAlign: 'center',
-    padding: 10,
+  locationBtnText: {
+    marginLeft: 10,
   },
 });

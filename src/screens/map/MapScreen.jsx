@@ -3,15 +3,12 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { MapsViews } from '../../components';
-import { ROUTES } from '../../constants';
 import { coordsLocation } from '../../store';
 import { insertAddress } from '../../db';
 import { useDispatch } from 'react-redux';
 import { useLayoutEffect } from 'react';
-import { useTheme } from '@react-navigation/native';
 
 const MapScreen = ({ navigation }) => {
-  const { colors, fonts } = useTheme();
   const dispatch = useDispatch();
   const [selectedLocation, setSelectedLocation] = useState();
 
@@ -37,7 +34,6 @@ const MapScreen = ({ navigation }) => {
     if (!selectedLocation) return;
     dispatch(coordsLocation(selectedLocation));
     const { lat, lng } = selectedLocation;
-    console.log({ selectedLocation });
     await insertAddress(lat, lng);
     navigation.goBack();
   };

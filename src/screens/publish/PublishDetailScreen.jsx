@@ -70,7 +70,7 @@ const PublishDetailScreen = ({ navigation, route }) => {
             }`}
           </Text>
           <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
-            {`lat[${publication.location.lat}] : lng[${publication.location.lng}]`}
+            {`Zona: ${publication.addss === null ? 'No especificada' : publication.addss}`}
           </Text>
           <View style={styles.publicateBy}>
             <Text style={{ ...styles.publicateName, color: colors.text, fontFamily: fonts.title }}>

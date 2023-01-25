@@ -1,15 +1,14 @@
 import * as ImagePicker from 'expo-image-picker';
 
-import { CATEGORIES, IDENTIFICATION, SEX, TYPE_ANIMAL } from '../../constants';
-import { ErrorAlert, Input, Loading, Picker, PickerInput } from '../../components';
+import { CATEGORIES, IDENTIFICATION, ROUTES, SEX, TYPE_ANIMAL } from '../../constants';
+import { ErrorAlert, Input, Loading, MapBox, Picker, PickerInput } from '../../components';
 import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { askPermissionCamera, clearNewId, loadingState } from '../../store';
+import { askPermissionCamera, clearNewId, geoCodingLocation, loadingState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert } from 'react-native';
 import { Avatar } from '@rneui/themed';
-import { Button } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import moment from 'moment';
@@ -28,6 +27,7 @@ const NewPublishScreen = ({ navigation, route }) => {
   const newDate = new Date();
   const [dateTime, setDateTime] = useState(newDate);
   const [showPicker, setShowPicker] = useState(false);
+  const { address, coords } = useSelector((state) => state.locations);
 
   const onShowPicker = () => {
     setShowPicker(true);
@@ -43,6 +43,7 @@ const NewPublishScreen = ({ navigation, route }) => {
   const typeIde = typeTemp ? typeTemp._id : '';
 
   const validateExcluded = {
+    _address,
     image,
     typeAnimal,
     race,
@@ -55,6 +56,7 @@ const NewPublishScreen = ({ navigation, route }) => {
   };
 
   const {
+    _address,
     date,
     description,
     errors,
@@ -74,6 +76,7 @@ const NewPublishScreen = ({ navigation, route }) => {
     setFormValue,
     form,
   } = useFormValidator({
+    _address: '',
     date: '',
     description: '',
     identification: true,
@@ -88,14 +91,20 @@ const NewPublishScreen = ({ navigation, route }) => {
   });
 
   useEffect(() => {
+    dispatch(geoCodingLocation());
+  }, [coords]);
+
+  useEffect(() => {
     chargeImage();
   }, [newId]);
 
   useEffect(() => {
     setFormValue({
       date: dateTime.toLocaleString(),
+      zone: coords,
+      _address: address,
     });
-  }, [dateTime]);
+  }, [dateTime, coords, address]);
 
   useEffect(() => {
     navigation.getParent().setOptions({
@@ -190,7 +199,7 @@ const NewPublishScreen = ({ navigation, route }) => {
   if (loading) return <Loading />;
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="never">
       <ErrorAlert msg="Publicación fallida" />
       <View style={styles.container}>
         <View style={styles.subContainer}>
@@ -287,7 +296,20 @@ const NewPublishScreen = ({ navigation, route }) => {
           <View style={styles.inputContainer}>
             {Platform.OS === 'android' ? (
               <>
-                <Button title="Elegir fecha" onPress={onShowPicker} color={colors.primary} />
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={{ ...styles.publishBtn, backgroundColor: colors.primary, width: '100%' }}
+                  onPress={onShowPicker}>
+                  <Icon name="calendar" size={24} color={colors.text} />
+                  <Text
+                    style={{
+                      ...styles.publishBtnText,
+                      color: colors.text,
+                      fontFamily: fonts.title,
+                    }}>
+                    Elegir fecha
+                  </Text>
+                </TouchableOpacity>
                 {showPicker && (
                   <DateTimePicker
                     value={dateTime}
@@ -310,16 +332,7 @@ const NewPublishScreen = ({ navigation, route }) => {
           </View>
         </View>
         <View style={styles.subContainer}>
-          <Input
-            error={errors.zone}
-            label="¿En qué zona se ha perdido? :"
-            onChangeText={(value) => onChange(value, 'zone')}
-            onFocus={() => onReset('zone')}
-            placeholder="Ingresa la zona en la que el animal se perdió"
-            onSubmitEditing={onPublish}
-            placeholderTextColor="rgba(255,255,255,0.4)"
-            value={zone}
-          />
+          <MapBox label="Indicar zona:" coords={coords} address={address} route={ROUTES.MAP} />
         </View>
         <View style={styles.subContainer}>
           <Input
@@ -332,6 +345,7 @@ const NewPublishScreen = ({ navigation, route }) => {
             placeholder="Ingresa una descripción detallada del animal y las circunstancias de su pérdida"
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={description}
+            big
           />
         </View>
         <View style={styles.subContainer}>

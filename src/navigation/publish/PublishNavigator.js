@@ -1,4 +1,4 @@
-import { NewPublishScreen, PublishScreen } from '../../screens';
+import { MapScreen, NewPublishScreen, PublishScreen } from '../../screens';
 
 import { ROUTES } from '../../constants';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -33,6 +33,7 @@ const PublishNavigator = () => {
           headerShown: true,
         })}
       />
+      <Stack.Screen name={ROUTES.MAP} component={MapScreen} options={{ headerShown: true }} />
     </Stack.Navigator>
   );
 };

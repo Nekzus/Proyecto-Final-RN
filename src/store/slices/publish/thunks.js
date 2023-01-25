@@ -25,6 +25,7 @@ export const postPublication = (data) => {
         description: data.description,
         phone: data.phone,
         date: data.date,
+        addss: data._address,
       });
       dispatch(setNewId(resp.data._id));
       dispatch(getPublications());
@@ -107,6 +108,7 @@ export const putPublication = (data) => {
         description: data.description,
         phone: data.phone,
         date: data.date,
+        addss: data._address,
       });
       dispatch(getPublications());
       dispatch(getMyPublications(uid));
