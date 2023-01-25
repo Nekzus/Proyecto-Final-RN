@@ -1,5 +1,5 @@
 export const primaryTheme = {
-  dark: true,
+  dark: false,
   colors: {
     primary: '#012A4A',
     background: '#2C7DA0',

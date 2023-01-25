@@ -4,6 +4,7 @@ import {
   locationsSlice,
   permissionsSlice,
   publishSlice,
+  themeSlice,
 } from './slices';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
@@ -16,7 +17,7 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   stateReconciler: autoMergeLevel2,
-  whitelist: [], // TODO: ['auth', 'locations', 'permissions', 'publish']
+  whitelist: ['auth', 'errors', 'publish'], // TODO: ['permissions', 'publish', 'theme']
 };
 
 const rootReducer = combineReducers({
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   permissions: permissionsSlice.reducer,
   publish: publishSlice.reducer,
   errors: errorloadSlice.reducer,
+  theme: themeSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

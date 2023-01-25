@@ -1,6 +1,6 @@
-import * as Location from "expo-location";
+import * as Location from 'expo-location';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export const useLocation = () => {
   const [hasLocation, setHasLocation] = useState(false);

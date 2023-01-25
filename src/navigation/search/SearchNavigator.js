@@ -24,11 +24,6 @@ const SearchNavigator = () => {
         },
         headerTitleAlign: 'center',
       }}>
-      {/* <Stack.Screen
-        name={ROUTES.SEARCH_LIST}
-        component={SearchScreen}
-        options={{ headerShown: false }} //TODO: revisar
-      /> */}
       <Stack.Screen
         name={ROUTES.SEARCH_TAB}
         component={SearchTabNavigator}

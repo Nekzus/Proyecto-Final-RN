@@ -1,5 +1,6 @@
 import {
   EditProfileScreen,
+  MapScreen,
   MyLocationScreen,
   MyPublishScreen,
   ProfileScreen,
@@ -45,6 +46,7 @@ const ProfileNavigator = () => {
         component={MyLocationScreen}
         options={{ headerShown: true }}
       />
+      <Stack.Screen name={ROUTES.MAP} component={MapScreen} options={{ headerShown: true }} />
       <Stack.Screen
         name={ROUTES.MY_PUBLISH}
         component={MyPublishScreen}

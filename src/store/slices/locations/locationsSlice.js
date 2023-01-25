@@ -6,8 +6,6 @@ export const locationsSlice = createSlice({
     coords: {},
     address: null,
     history: [],
-    loading: false,
-    error: null,
   },
   reducers: {
     coordsLocation: (state, action) => {
@@ -20,19 +18,7 @@ export const locationsSlice = createSlice({
     historyLocations: (state, action) => {
       state.history = action.payload;
     },
-    loadingLocations: (state, action) => {
-      state.loading = action.payload;
-    },
-    errorLocations: (state, action) => {
-      state.error = action.payload;
-    },
   },
 });
 
-export const {
-  coordsLocation,
-  addressLocation,
-  historyLocations,
-  loadingLocations,
-  errorLocations,
-} = locationsSlice.actions;
+export const { coordsLocation, addressLocation, historyLocations } = locationsSlice.actions;

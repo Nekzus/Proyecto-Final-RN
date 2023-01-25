@@ -1,11 +1,11 @@
 import { COLORS, ROUTES } from '../../constants';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { askPermissionLocation, logout } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Avatar } from '@rneui/themed';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import React from 'react';
-import { logout } from '../../store';
 import { useTheme } from '@react-navigation/native';
 
 const ProfileScreen = ({ navigation }) => {
@@ -45,6 +45,7 @@ const ProfileScreen = ({ navigation }) => {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => {
+            dispatch(askPermissionLocation());
             navigation.navigate(ROUTES.MY_LOCATION);
           }}
           style={styles.option}>

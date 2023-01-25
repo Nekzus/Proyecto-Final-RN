@@ -1,12 +1,7 @@
 import * as Location from 'expo-location';
 
-import {
-  addressLocation,
-  coordsLocation,
-  errorLocations,
-  historyLocations,
-  loadingLocations,
-} from './locationsSlice';
+import { addressLocation, coordsLocation, historyLocations } from './locationsSlice';
+import { errorState, loadingState } from '../error-load';
 import { fetchAddress, insertAddress } from '../../../db';
 
 import { URL_GEOCODING } from '../../../constants/maps';
@@ -19,7 +14,7 @@ export const currentLocation = () => {
     if (locationStatus !== 'granted') {
       return;
     }
-    dispatch(loadingLocations(true));
+    dispatch(loadingState(true));
     try {
       let location = await Location.getCurrentPositionAsync({
         timeInterval: 1000,
@@ -47,9 +42,10 @@ export const currentLocation = () => {
       }
     } catch (error) {
       console.log('Error in currentLocation', error);
-      dispatch(errorLocations(error));
+      if (!error.response) return;
+      dispatch(errorState(error.response.data.msg || error.response.data.errors[0].msg));
     } finally {
-      dispatch(loadingLocations(false));
+      dispatch(loadingState(false));
     }
   };
 };
@@ -60,7 +56,7 @@ export const geoCodingLocation = () => {
       locations: { coords },
     } = getState();
     if (coords?.lat && coords?.lng) {
-      dispatch(loadingLocations(true));
+      dispatch(loadingState(true));
       try {
         const resp = await fetch(URL_GEOCODING(coords?.lat, coords?.lng));
         if (!resp.ok) {
@@ -72,11 +68,12 @@ export const geoCodingLocation = () => {
         }
         const address = data.results[0]?.formatted_address;
         dispatch(addressLocation(address));
-        dispatch(loadingLocations(false));
+        dispatch(loadingState(false));
       } catch (error) {
         console.log({ error });
-        dispatch(errorLocations(error));
-        dispatch(loadingLocations(false));
+        if (!error.response) return;
+        dispatch(errorState(error.response.data.msg || error.response.data.errors[0].msg));
+        dispatch(loadingState(false));
       }
     }
   };
@@ -84,17 +81,18 @@ export const geoCodingLocation = () => {
 
 export const loadAddress = () => {
   return async (dispatch) => {
-    dispatch(loadingLocations(true));
+    dispatch(loadingState(true));
     try {
       const {
         rows: { _array },
       } = await fetchAddress();
       dispatch(historyLocations(_array));
-      dispatch(loadingLocations(false));
+      dispatch(loadingState(false));
     } catch (error) {
       console.log(error);
-      dispatch(errorLocations(error));
-      dispatch(loadingLocations(false));
+      if (!error.response) return;
+      dispatch(errorState(error.response.data.msg || error.response.data.errors[0].msg));
+      dispatch(loadingState(false));
     }
   };
 };

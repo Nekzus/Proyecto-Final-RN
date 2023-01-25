@@ -2,7 +2,7 @@ export default {
   EDIT_PROFILE: 'Editar perfil',
   FILTER: 'Filter',
   LOGIN: 'Login',
-  MAP: 'Map',
+  MAP: 'Mapa',
   MY_LOCATION: 'Mi ubicación',
   MY_PUBLISH: 'Mis publicaciones',
   NEW_PUBLISH: 'Nueva Publicacion',

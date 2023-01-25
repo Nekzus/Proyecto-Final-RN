@@ -1,12 +1,20 @@
-import { askPermissionCamera, askPermissionLocation, getCategories } from '../store';
+import {
+  askPermissionCamera,
+  askPermissionLocation,
+  checkPermissionLocation,
+  currentLocation,
+  getCategories,
+  loadAddress,
+} from '../store';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { AppState } from 'react-native';
 import { Ionicons as Icon } from '@expo/vector-icons';
 import ProfileNavigator from './profile/ProfileNavigator';
 import PublishNavigator from './publish/PublishNavigator';
 import { ROUTES } from '../constants';
 import SearchNavigator from './search/SearchNavigator';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { useTheme } from '@react-navigation/native';
 
@@ -15,6 +23,18 @@ const BottomTab = createBottomTabNavigator();
 const TabNavigator = () => {
   const { colors, fonts } = useTheme();
   const dispatch = useDispatch();
+  const { coords } = useSelector((state) => state.locations);
+  const { locationStatus } = useSelector((state) => state.permissions);
+
+  useEffect(() => {
+    const subs = AppState.addEventListener('change', (state) => {
+      if (state !== 'active') return;
+      dispatch(checkPermissionLocation());
+    });
+    return () => {
+      subs.remove();
+    };
+  }, []);
 
   useEffect(() => {
     dispatch(getCategories());
@@ -27,6 +47,14 @@ const TabNavigator = () => {
   useEffect(() => {
     dispatch(askPermissionCamera());
   }, []);
+
+  useEffect(() => {
+    dispatch(currentLocation());
+  }, [locationStatus]);
+
+  useEffect(() => {
+    dispatch(loadAddress());
+  }, [coords]);
 
   return (
     <BottomTab.Navigator
