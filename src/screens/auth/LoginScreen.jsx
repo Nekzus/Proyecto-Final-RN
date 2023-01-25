@@ -86,7 +86,7 @@ const LoginScreen = ({ navigation }) => {
               activeOpacity={0.8}
               onPress={() => navigation.replace(ROUTES.REGISTER)}>
               <Text style={{ ...AuthStyles.buttonText, fontFamily: fonts.title }}>
-                Nueva cuenta
+                No tienes cuenta? Registrate
               </Text>
             </TouchableOpacity>
           </View>

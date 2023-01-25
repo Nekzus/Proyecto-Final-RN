@@ -1,4 +1,3 @@
-import { COLORS, ROUTES } from '../../constants';
 import { ErrorAlert, Logo } from '../../components';
 import {
   Keyboard,
@@ -6,13 +5,13 @@ import {
   Platform,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 
 import { AuthStyles } from './AuthStyles';
 import Input from '../../components/Input';
+import { ROUTES } from '../../constants';
 import React from 'react';
 import { register } from '../../store';
 import { useDispatch } from 'react-redux';
@@ -103,7 +102,9 @@ const RegisterScreen = ({ navigation }) => {
             activeOpacity={0.8}
             onPress={() => navigation.replace(ROUTES.LOGIN)}
             style={AuthStyles.buttonReturn}>
-            <Text style={{ ...AuthStyles.buttonText, fontFamily: fonts.title }}>Login</Text>
+            <Text style={{ ...AuthStyles.buttonText, fontFamily: fonts.title }}>
+              Tienes cuenta? Ingresa
+            </Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

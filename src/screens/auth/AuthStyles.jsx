@@ -30,7 +30,7 @@ export const AuthStyles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 20,
   },
   button: {
     borderWidth: 2,
@@ -44,17 +44,11 @@ export const AuthStyles = StyleSheet.create({
     color: 'white',
   },
   newUserContainer: {
-    alignItems: 'flex-end',
-    marginTop: 10,
+    alignItems: 'center',
+    marginVertical: 35,
   },
   buttonReturn: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    borderWidth: 1,
-    borderColor: 'white',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 100,
+    alignItems: 'center',
+    marginVertical: 35,
   },
 });

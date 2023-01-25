@@ -17,7 +17,7 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   stateReconciler: autoMergeLevel2,
-  whitelist: ['auth', 'errors', 'publish'], // TODO: ['permissions', 'publish', 'theme']
+  whitelist: ['auth', 'errors', 'permissions', 'publish', 'theme'],
 };
 
 const rootReducer = combineReducers({
