@@ -118,7 +118,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
       _address: address,
       zone: coords,
     });
-  }, [coords]);
+  }, [address, coords]);
 
   const loadPublication = async () => {
     if (id.length === 0 || publication === null) return;
@@ -133,7 +133,6 @@ const UpdatePublishScreen = ({ navigation, route }) => {
       race: publication.race,
       sex: publication.sex,
       typeAnimal: publication.typeanimal,
-      zone: publication.location,
       typeId: publication.categoria._id,
     });
   };
