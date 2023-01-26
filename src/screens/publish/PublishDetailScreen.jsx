@@ -51,26 +51,22 @@ const PublishDetailScreen = ({ navigation, route }) => {
             {`Tipo: ${publication.typeanimal}`}
           </Text>
           <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
-            {`Raza: ${publication.race}`}
+            {`Raza: ${publication.race === null ? 'No especificada' : publication.race}`}
           </Text>
           <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
             {`Sexo: ${publication.sex}`}
           </Text>
           <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
-            {`Collar: ${publication.identification ? 'Si' : 'No'}`}
+            {`Collar: ${publication.identification}`}
           </Text>
           <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
             {`Tel. Contacto: ${publication.phone}`}
           </Text>
           <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
-            {`Fecha: ${
-              publication.date === null
-                ? 'No especificada'
-                : moment(publication.date).format('DD/MM/YYYY')
-            }`}
+            {`Fecha: ${moment(publication.date).format('DD/MM/YYYY')}`}
           </Text>
           <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
-            {`Zona: ${publication.addss === null ? 'No especificada' : publication.addss}`}
+            {`Zona: ${publication.addss}`}
           </Text>
           <View style={styles.publicateBy}>
             <Text style={{ ...styles.publicateName, color: colors.text, fontFamily: fonts.title }}>

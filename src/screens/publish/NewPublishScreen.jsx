@@ -4,7 +4,13 @@ import { CATEGORIES, IDENTIFICATION, ROUTES, SEX, TYPE_ANIMAL } from '../../cons
 import { ErrorAlert, Input, Loading, MapBox, Picker, PickerInput } from '../../components';
 import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { askPermissionCamera, clearNewId, geoCodingLocation, loadingState } from '../../store';
+import {
+  askPermissionCamera,
+  clearMarkcoordsLocation,
+  clearNewId,
+  geoCodingLocation,
+  loadingState,
+} from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Alert } from 'react-native';
@@ -27,7 +33,21 @@ const NewPublishScreen = ({ navigation, route }) => {
   const newDate = new Date();
   const [dateTime, setDateTime] = useState(newDate);
   const [showPicker, setShowPicker] = useState(false);
-  const { address, coords } = useSelector((state) => state.locations);
+  const { address, markcoords, coords } = useSelector((state) => state.locations);
+
+  useEffect(() => {
+    dispatch(clearMarkcoordsLocation());
+  }, []);
+
+  useEffect(() => {
+    dispatch(geoCodingLocation(true));
+  }, [markcoords]);
+
+  useEffect(() => {
+    dispatch(geoCodingLocation());
+  }, [coords]);
+
+  const location = Object.keys(markcoords).length !== 0 ? markcoords : coords;
 
   const onShowPicker = () => {
     setShowPicker(true);
@@ -52,7 +72,6 @@ const NewPublishScreen = ({ navigation, route }) => {
     date,
     zone,
     description,
-    phone,
   };
 
   const {
@@ -79,20 +98,16 @@ const NewPublishScreen = ({ navigation, route }) => {
     _address: '',
     date: '',
     description: '',
-    identification: true,
+    identification: '',
     image: '',
     title: '',
     phone: '',
     race: '',
-    sex: 'macho',
+    sex: '',
     typeAnimal: 'perro',
-    zone: { lat: 0, lng: 0 },
+    zone: {},
     typeId: typeIde,
   });
-
-  useEffect(() => {
-    dispatch(geoCodingLocation());
-  }, [coords]);
 
   useEffect(() => {
     chargeImage();
@@ -101,10 +116,10 @@ const NewPublishScreen = ({ navigation, route }) => {
   useEffect(() => {
     setFormValue({
       date: dateTime.toLocaleString(),
-      zone: coords,
+      zone: markcoords,
       _address: address,
     });
-  }, [dateTime, coords, address]);
+  }, [dateTime, markcoords, address]);
 
   useEffect(() => {
     navigation.getParent().setOptions({
@@ -136,6 +151,7 @@ const NewPublishScreen = ({ navigation, route }) => {
         },
       },
     ]);
+    dispatch(clearMarkcoordsLocation());
     reset();
   };
 
@@ -332,7 +348,7 @@ const NewPublishScreen = ({ navigation, route }) => {
           </View>
         </View>
         <View style={styles.subContainer}>
-          <MapBox label="Indicar zona:" coords={coords} address={address} route={ROUTES.MAP} />
+          <MapBox label="Indicar zona:" coords={location} address={address} route={ROUTES.MAP} />
         </View>
         <View style={styles.subContainer}>
           <Input
@@ -356,7 +372,7 @@ const NewPublishScreen = ({ navigation, route }) => {
             onChangeText={(value) => onChange(value, 'phone')}
             onFocus={() => onReset('phone')}
             onSubmitEditing={onPublish}
-            placeholder="Ingresa tu teléfono para que te podamos contactar"
+            placeholder="Ingresa tu teléfono de contacto"
             placeholderTextColor="rgba(255,255,255,0.4)"
             value={phone}
           />

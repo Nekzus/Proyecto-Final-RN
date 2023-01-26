@@ -19,7 +19,7 @@ const MapBox = ({ label, coords, route, address, ...props }) => {
         activeOpacity={0.8}
         onPress={() => {
           dispatch(askPermissionLocation());
-          navigation.navigate(route);
+          navigation.navigate(route, { isLocation: false });
         }}>
         <View
           style={[

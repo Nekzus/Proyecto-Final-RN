@@ -4,7 +4,12 @@ import { CATEGORIES, IDENTIFICATION, ROUTES, SEX, TYPE_ANIMAL } from '../../cons
 import { ErrorAlert, Loading, MapBox, PickerInput } from '../../components';
 import { Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { askPermissionCamera, geoCodingLocation, loadingState } from '../../store';
+import {
+  askPermissionCamera,
+  clearMarkcoordsLocation,
+  geoCodingLocation,
+  loadingState,
+} from '../../store';
 import { deletePublication, putPublication } from '../../store/slices/publish/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -20,15 +25,25 @@ import { useTheme } from '@react-navigation/native';
 
 const UpdatePublishScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const { categories, publication } = useSelector((state) => state.publish);
+  const { publication } = useSelector((state) => state.publish);
   const { loading } = useSelector((state) => state.errors);
   const [tempUri, setTempUri] = useState(null);
-  const { id = '', type } = route.params;
   const { colors, fonts } = useTheme();
   const newDate = new Date();
   const [dateTime, setDateTime] = useState(newDate);
   const [showPicker, setShowPicker] = useState(false);
-  const { address, coords } = useSelector((state) => state.locations);
+  const { address, markcoords } = useSelector((state) => state.locations);
+
+  useEffect(() => {
+    dispatch(clearMarkcoordsLocation());
+  }, [publication]);
+
+  useEffect(() => {
+    dispatch(geoCodingLocation(true));
+  }, [markcoords]);
+
+  const location = Object.keys(markcoords).length !== 0 ? markcoords : publication?.location;
+  const addss = address ? address : publication?.addss;
 
   const onShowPicker = () => {
     setShowPicker(true);
@@ -38,10 +53,6 @@ const UpdatePublishScreen = ({ navigation, route }) => {
     setDateTime(selectedDate);
     setShowPicker(false);
   };
-
-  const typeTemp = categories.find((category) => category.nombre === type.toUpperCase());
-
-  const typeIde = typeTemp ? typeTemp._id : '';
 
   const validateExcluded = {
     _address,
@@ -54,7 +65,6 @@ const UpdatePublishScreen = ({ navigation, route }) => {
     date,
     zone,
     description,
-    phone,
   };
 
   const {
@@ -79,24 +89,20 @@ const UpdatePublishScreen = ({ navigation, route }) => {
     setFormValue,
     form,
   } = useFormValidator({
-    _address: publication.addss,
-    _id: id,
+    _address: '',
+    _id: '',
     date: '',
     description: '',
-    identification: true,
+    identification: '',
     image: '',
     title: '',
     phone: '',
     race: '',
-    sex: 'macho',
-    typeAnimal: 'perro',
-    zone: { lat: 0, lng: 0 },
-    typeId: typeIde,
+    sex: '',
+    typeAnimal: '',
+    zone: {},
+    typeId: '',
   });
-
-  useEffect(() => {
-    dispatch(geoCodingLocation());
-  }, [coords]);
 
   useEffect(() => {
     navigation.getParent().setOptions({
@@ -111,21 +117,28 @@ const UpdatePublishScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     loadPublication();
-  }, [id, publication, dateTime]);
+  }, [publication]);
 
   useEffect(() => {
     setFormValue({
-      _address: address,
-      zone: coords,
+      _address: addss,
+      zone: location,
     });
-  }, [address, coords]);
+  }, [addss, location]);
+
+  useEffect(() => {
+    showPicker &&
+      setFormValue({
+        date: dateTime,
+      });
+  }, [dateTime]);
 
   const loadPublication = async () => {
-    if (id.length === 0 || publication === null) return;
+    if (publication === null) return;
     await setFormValue({
       _id: publication._id,
       description: publication.description,
-      date: dateTime.toLocaleString(),
+      date: publication.date,
       identification: publication.identification,
       image: publication.img,
       title: publication.title,
@@ -163,6 +176,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
         },
       },
     ]);
+    dispatch(clearMarkcoordsLocation());
     reset();
   };
 
@@ -180,6 +194,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
         },
       },
     ]);
+    dispatch(clearMarkcoordsLocation());
     reset();
   };
 
@@ -328,7 +343,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
             onSubmitEditing={onUpdate}
             editable={false}
             placeholderTextColor="rgba(255,255,255,0.4)"
-            value={moment(dateTime).format('DD/MM/YYYY')}
+            value={moment(date).format('DD/MM/YYYY')}
           />
           <View style={styles.inputContainer}>
             {Platform.OS === 'android' ? (
@@ -369,7 +384,7 @@ const UpdatePublishScreen = ({ navigation, route }) => {
           </View>
         </View>
         <View style={styles.subContainer}>
-          <MapBox label="Indicar zona:" coords={coords} address={address} route={ROUTES.MAP} />
+          <MapBox label="Indicar zona:" coords={location} address={addss} route={ROUTES.MAP} />
         </View>
         <View style={styles.subContainer}>
           <Input

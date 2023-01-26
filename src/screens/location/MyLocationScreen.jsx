@@ -58,7 +58,7 @@ const MyLocationScreen = ({ navigation }) => {
           <TouchableOpacity
             activeOpacity={0.8}
             style={{ ...styles.locationBtn, backgroundColor: colors.notification }}
-            onPress={() => navigation.navigate(ROUTES.MAP)}>
+            onPress={() => navigation.navigate(ROUTES.MAP, { isLocation: true })}>
             <Icon name="google-maps" size={24} color={colors.text} />
             <Text
               style={{

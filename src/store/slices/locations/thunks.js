@@ -4,7 +4,7 @@ import { addressLocation, coordsLocation, historyLocations } from './locationsSl
 import { errorState, loadingState } from '../error-load';
 import { fetchAddress, insertAddress } from '../../../db';
 
-import { URL_GEOCODING } from '../../../constants/maps';
+import { URL_GEOCODING } from '../../../constants';
 
 export const currentLocation = () => {
   return async (dispatch, getState) => {
@@ -48,15 +48,19 @@ export const currentLocation = () => {
   };
 };
 
-export const geoCodingLocation = () => {
+export const geoCodingLocation = (marker) => {
   return async (dispatch, getState) => {
     const {
       locations: { coords },
     } = getState();
-    if (coords?.lat && coords?.lng) {
+    const {
+      locations: { markcoords },
+    } = getState();
+    const locate = marker ? markcoords : coords;
+    if (locate?.lat && locate?.lng) {
       dispatch(loadingState(true));
       try {
-        const resp = await fetch(URL_GEOCODING(coords?.lat, coords?.lng));
+        const resp = await fetch(URL_GEOCODING(locate?.lat, locate?.lng));
         if (!resp.ok) {
           throw new Error('No se ha podido conectar al servicio');
         }

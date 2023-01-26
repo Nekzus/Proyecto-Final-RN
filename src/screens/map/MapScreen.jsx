@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { coordsLocation, markcoordsLocation } from '../../store';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { MapsViews } from '../../components';
-import { coordsLocation } from '../../store';
 import { insertAddress } from '../../db';
 import { useDispatch } from 'react-redux';
 import { useLayoutEffect } from 'react';
 
-const MapScreen = ({ navigation }) => {
+const MapScreen = ({ navigation, route }) => {
+  const { isLocation = false } = route.params;
   const dispatch = useDispatch();
   const [selectedLocation, setSelectedLocation] = useState();
 
@@ -32,7 +33,11 @@ const MapScreen = ({ navigation }) => {
 
   const onHandleSaveLocation = async () => {
     if (!selectedLocation) return;
-    dispatch(coordsLocation(selectedLocation));
+    if (isLocation) {
+      dispatch(coordsLocation(selectedLocation));
+    } else {
+      dispatch(markcoordsLocation(selectedLocation));
+    }
     const { lat, lng } = selectedLocation;
     await insertAddress(lat, lng);
     navigation.goBack();
