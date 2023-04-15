@@ -57,7 +57,7 @@ const PublishDetailScreen = ({ navigation, route }) => {
             {`Sexo: ${publication.sex}`}
           </Text>
           <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
-            {`Collar: ${publication.identification}`}
+            {`Collar: ${publication.identification ? 'si' : 'no'}`}
           </Text>
           <Text style={{ ...styles.fields, color: colors.text, fontFamily: fonts.content }}>
             {`Tel. Contacto: ${publication.phone}`}
